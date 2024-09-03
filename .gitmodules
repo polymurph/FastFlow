@@ -1,0 +1,3 @@
+[submodule "Firmware/tinyFSM"]
+	path = Firmware/tinyFSM
+	url = https://github.com/polymurph/tinyFSM.git
