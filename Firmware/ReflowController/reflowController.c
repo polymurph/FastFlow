@@ -4,16 +4,9 @@
 
 static fsm_t reflowFSM;
 
-////////////////////////////////////////////////////////////////
-// predefinitions of local functions
-
 void _state_init();
-void _state_
+void _state_menu();
 void _state_error();
-
-
-////////////////////////////////////////////////////////////////
-// implementation of api functions
 
 void run()
 {
@@ -28,16 +21,20 @@ void run()
     }
 }
 
-////////////////////////////////////////////////////////////////
-// implementation of local functions
-
 void _state_init()
 {
     
     // transition state if init is successfull
     if(hw_init()){
-        fsmTransitionState(&reflowFSM,);
+        fsmTransitionState(&reflowFSM, _state_menu, fsmNoAction);
+    } else {
+        fsmTransitionState(&reflowFSM, _state_error, fsmNoAction);
     }
+}
+
+void _state_menu()
+{
+
 }
 
 void _state_error()
