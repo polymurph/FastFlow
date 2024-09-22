@@ -34,6 +34,9 @@ void _state_init()
 
 void _state_menu()
 {
+    if(ui_runMenu() == UI_SELECtION_MADE){
+        
+    }
     
 }
 

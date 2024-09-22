@@ -1,0 +1,2 @@
+../hardware/buzzer.c:4:6:buzzer_init	1
+../hardware/buzzer.c:9:6:buzzer_beep	1
