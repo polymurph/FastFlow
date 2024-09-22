@@ -54,3 +54,7 @@ dkms.conf
 # VSCode
 .vscode/*
 
+# STM32CubeIDE
+.metadata/
+.settings/
+*.ld
