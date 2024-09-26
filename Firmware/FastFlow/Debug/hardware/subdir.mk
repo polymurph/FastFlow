@@ -7,17 +7,17 @@
 C_SRCS += \
 ../hardware/buzzer.c \
 ../hardware/hardware.c \
-../hardware/heater.c 
+../hardware/oven.c 
 
 OBJS += \
 ./hardware/buzzer.o \
 ./hardware/hardware.o \
-./hardware/heater.o 
+./hardware/oven.o 
 
 C_DEPS += \
 ./hardware/buzzer.d \
 ./hardware/hardware.d \
-./hardware/heater.d 
+./hardware/oven.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -27,7 +27,7 @@ hardware/%.o hardware/%.su hardware/%.cyclo: ../hardware/%.c hardware/subdir.mk
 clean: clean-hardware
 
 clean-hardware:
-	-$(RM) ./hardware/buzzer.cyclo ./hardware/buzzer.d ./hardware/buzzer.o ./hardware/buzzer.su ./hardware/hardware.cyclo ./hardware/hardware.d ./hardware/hardware.o ./hardware/hardware.su ./hardware/heater.cyclo ./hardware/heater.d ./hardware/heater.o ./hardware/heater.su
+	-$(RM) ./hardware/buzzer.cyclo ./hardware/buzzer.d ./hardware/buzzer.o ./hardware/buzzer.su ./hardware/hardware.cyclo ./hardware/hardware.d ./hardware/hardware.o ./hardware/hardware.su ./hardware/oven.cyclo ./hardware/oven.d ./hardware/oven.o ./hardware/oven.su
 
 .PHONY: clean-hardware
 

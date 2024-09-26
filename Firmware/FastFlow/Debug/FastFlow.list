@@ -5,47 +5,47 @@ Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .isr_vector   00000198  08000000  08000000  00001000  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  1 .text         00002ae8  08000198  08000198  00001198  2**2
+  1 .text         00002b08  08000198  08000198  00001198  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       00000018  08002c80  08002c80  00003c80  2**2
+  2 .rodata       00000018  08002ca0  08002ca0  00003ca0  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  3 .ARM.extab    00000000  08002c98  08002c98  0000400c  2**0
+  3 .ARM.extab    00000000  08002cb8  08002cb8  0000400c  2**0
                   CONTENTS
-  4 .ARM          00000008  08002c98  08002c98  00003c98  2**2
+  4 .ARM          00000008  08002cb8  08002cb8  00003cb8  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  5 .preinit_array 00000000  08002ca0  08002ca0  0000400c  2**0
+  5 .preinit_array 00000000  08002cc0  08002cc0  0000400c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  6 .init_array   00000004  08002ca0  08002ca0  00003ca0  2**2
+  6 .init_array   00000004  08002cc0  08002cc0  00003cc0  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  7 .fini_array   00000004  08002ca4  08002ca4  00003ca4  2**2
+  7 .fini_array   00000004  08002cc4  08002cc4  00003cc4  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  8 .data         0000000c  20000000  08002ca8  00004000  2**2
+  8 .data         0000000c  20000000  08002cc8  00004000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  9 .bss          00000198  2000000c  08002cb4  0000400c  2**2
+  9 .bss          00000198  2000000c  08002cd4  0000400c  2**2
                   ALLOC
- 10 ._user_heap_stack 00000604  200001a4  08002cb4  000041a4  2**0
+ 10 ._user_heap_stack 00000604  200001a4  08002cd4  000041a4  2**0
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  0000400c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   0000dc4f  00000000  00000000  0000403c  2**0
+ 12 .debug_info   0000dd50  00000000  00000000  0000403c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00002128  00000000  00000000  00011c8b  2**0
+ 13 .debug_abbrev 000021ca  00000000  00000000  00011d8c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00000e08  00000000  00000000  00013db8  2**3
+ 14 .debug_aranges 00000e58  00000000  00000000  00013f58  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_rnglists 00000af0  00000000  00000000  00014bc0  2**0
+ 15 .debug_rnglists 00000b22  00000000  00000000  00014db0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  000162fe  00000000  00000000  000156b0  2**0
+ 16 .debug_macro  0001651e  00000000  00000000  000158d2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0001087c  00000000  00000000  0002b9ae  2**0
+ 17 .debug_line   00011072  00000000  00000000  0002bdf0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0008c362  00000000  00000000  0003c22a  2**0
+ 18 .debug_str    0008c3d7  00000000  00000000  0003ce62  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  000c858c  2**0
+ 19 .comment      00000043  00000000  00000000  000c9239  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00003a48  00000000  00000000  000c85d0  2**2
+ 20 .debug_frame  00003ae8  00000000  00000000  000c927c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000069  00000000  00000000  000cc018  2**0
+ 21 .debug_line_str 00000069  00000000  00000000  000ccd64  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -64,7 +64,7 @@ Disassembly of section .text:
  80001ae:	bd10      	pop	{r4, pc}
  80001b0:	2000000c 	.word	0x2000000c
  80001b4:	00000000 	.word	0x00000000
- 80001b8:	08002c68 	.word	0x08002c68
+ 80001b8:	08002c88 	.word	0x08002c88
 
 080001bc <frame_dummy>:
  80001bc:	b508      	push	{r3, lr}
@@ -76,7 +76,7 @@ Disassembly of section .text:
  80001ca:	bd08      	pop	{r3, pc}
  80001cc:	00000000 	.word	0x00000000
  80001d0:	20000010 	.word	0x20000010
- 80001d4:	08002c68 	.word	0x08002c68
+ 80001d4:	08002c88 	.word	0x08002c88
 
 080001d8 <__aeabi_uldivmod>:
  80001d8:	b953      	cbnz	r3, 80001f0 <__aeabi_uldivmod+0x18>
@@ -554,7 +554,7 @@ void SystemClock_Config(void)
  80005fa:	2230      	movs	r2, #48	@ 0x30
  80005fc:	2100      	movs	r1, #0
  80005fe:	4618      	mov	r0, r3
- 8000600:	f002 fb06 	bl	8002c10 <memset>
+ 8000600:	f002 fb15 	bl	8002c2e <memset>
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
  8000604:	f107 030c 	add.w	r3, r7, #12
  8000608:	2200      	movs	r2, #0
@@ -1161,7 +1161,7 @@ void MX_TIM1_Init(void)
  80008c6:	2220      	movs	r2, #32
  80008c8:	2100      	movs	r1, #0
  80008ca:	4618      	mov	r0, r3
- 80008cc:	f002 f9a0 	bl	8002c10 <memset>
+ 80008cc:	f002 f9af 	bl	8002c2e <memset>
 
   /* USER CODE BEGIN TIM1_Init 1 */
 
@@ -1322,7 +1322,7 @@ void MX_TIM3_Init(void)
  80009b2:	2224      	movs	r2, #36	@ 0x24
  80009b4:	2100      	movs	r1, #0
  80009b6:	4618      	mov	r0, r3
- 80009b8:	f002 f92a 	bl	8002c10 <memset>
+ 80009b8:	f002 f939 	bl	8002c2e <memset>
   TIM_MasterConfigTypeDef sMasterConfig = {0};
  80009bc:	1d3b      	adds	r3, r7, #4
  80009be:	2200      	movs	r2, #0
@@ -2066,7 +2066,7 @@ LoopFillZerobss:
 
 /* Call static constructors */
     bl __libc_init_array
- 8000dda:	f001 ff21 	bl	8002c20 <__libc_init_array>
+ 8000dda:	f001 ff31 	bl	8002c40 <__libc_init_array>
 /* Call the application's entry point.*/
   bl  main
  8000dde:	f7ff fbf1 	bl	80005c4 <main>
@@ -2079,7 +2079,7 @@ LoopFillZerobss:
   ldr r1, =_edata
  8000dec:	2000000c 	.word	0x2000000c
   ldr r2, =_sidata
- 8000df0:	08002ca8 	.word	0x08002ca8
+ 8000df0:	08002cc8 	.word	0x08002cc8
   ldr r2, =_sbss
  8000df4:	2000000c 	.word	0x2000000c
   ldr r4, =_ebss
@@ -4349,7 +4349,7 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, ui
  8001a92:	bf00      	nop
  8001a94:	40023c00 	.word	0x40023c00
  8001a98:	40023800 	.word	0x40023800
- 8001a9c:	08002c80 	.word	0x08002c80
+ 8001a9c:	08002ca0 	.word	0x08002ca0
  8001aa0:	20000000 	.word	0x20000000
  8001aa4:	20000004 	.word	0x20000004
 
@@ -4653,7 +4653,7 @@ uint32_t HAL_RCC_GetPCLK1Freq(void)
  8001ce8:	4618      	mov	r0, r3
  8001cea:	bd80      	pop	{r7, pc}
  8001cec:	40023800 	.word	0x40023800
- 8001cf0:	08002c90 	.word	0x08002c90
+ 8001cf0:	08002cb0 	.word	0x08002cb0
 
 08001cf4 <HAL_RCC_GetPCLK2Freq>:
   * @note   Each time PCLK2 changes, this function must be called to update the
@@ -4679,7 +4679,7 @@ uint32_t HAL_RCC_GetPCLK2Freq(void)
  8001d10:	4618      	mov	r0, r3
  8001d12:	bd80      	pop	{r7, pc}
  8001d14:	40023800 	.word	0x40023800
- 8001d18:	08002c90 	.word	0x08002c90
+ 8001d18:	08002cb0 	.word	0x08002cb0
 
 08001d1c <HAL_SPI_Init>:
   * @param  hspi pointer to a SPI_HandleTypeDef structure that contains
@@ -7060,68 +7060,103 @@ static void UART_SetConfig(UART_HandleTypeDef *huart)
 
 08002c08 <fastFlow_run>:
 #include "fastFlow.h"
-
+#include "hardware.h"
 
 void fastFlow_run()
 {
- 8002c08:	b480      	push	{r7}
+ 8002c08:	b580      	push	{r7, lr}
  8002c0a:	af00      	add	r7, sp, #0
+	init_hardware();
+ 8002c0c:	f000 f809 	bl	8002c22 <init_hardware>
+
 	while(1){
- 8002c0c:	bf00      	nop
- 8002c0e:	e7fd      	b.n	8002c0c <fastFlow_run+0x4>
+ 8002c10:	bf00      	nop
+ 8002c12:	e7fd      	b.n	8002c10 <fastFlow_run+0x8>
 
-08002c10 <memset>:
- 8002c10:	4402      	add	r2, r0
- 8002c12:	4603      	mov	r3, r0
- 8002c14:	4293      	cmp	r3, r2
- 8002c16:	d100      	bne.n	8002c1a <memset+0xa>
- 8002c18:	4770      	bx	lr
- 8002c1a:	f803 1b01 	strb.w	r1, [r3], #1
- 8002c1e:	e7f9      	b.n	8002c14 <memset+0x4>
+08002c14 <buzzer_init>:
 
-08002c20 <__libc_init_array>:
- 8002c20:	b570      	push	{r4, r5, r6, lr}
- 8002c22:	4d0d      	ldr	r5, [pc, #52]	@ (8002c58 <__libc_init_array+0x38>)
- 8002c24:	4c0d      	ldr	r4, [pc, #52]	@ (8002c5c <__libc_init_array+0x3c>)
- 8002c26:	1b64      	subs	r4, r4, r5
- 8002c28:	10a4      	asrs	r4, r4, #2
- 8002c2a:	2600      	movs	r6, #0
- 8002c2c:	42a6      	cmp	r6, r4
- 8002c2e:	d109      	bne.n	8002c44 <__libc_init_array+0x24>
- 8002c30:	4d0b      	ldr	r5, [pc, #44]	@ (8002c60 <__libc_init_array+0x40>)
- 8002c32:	4c0c      	ldr	r4, [pc, #48]	@ (8002c64 <__libc_init_array+0x44>)
- 8002c34:	f000 f818 	bl	8002c68 <_init>
- 8002c38:	1b64      	subs	r4, r4, r5
- 8002c3a:	10a4      	asrs	r4, r4, #2
- 8002c3c:	2600      	movs	r6, #0
- 8002c3e:	42a6      	cmp	r6, r4
- 8002c40:	d105      	bne.n	8002c4e <__libc_init_array+0x2e>
- 8002c42:	bd70      	pop	{r4, r5, r6, pc}
- 8002c44:	f855 3b04 	ldr.w	r3, [r5], #4
- 8002c48:	4798      	blx	r3
- 8002c4a:	3601      	adds	r6, #1
- 8002c4c:	e7ee      	b.n	8002c2c <__libc_init_array+0xc>
- 8002c4e:	f855 3b04 	ldr.w	r3, [r5], #4
- 8002c52:	4798      	blx	r3
- 8002c54:	3601      	adds	r6, #1
- 8002c56:	e7f2      	b.n	8002c3e <__libc_init_array+0x1e>
- 8002c58:	08002ca0 	.word	0x08002ca0
- 8002c5c:	08002ca0 	.word	0x08002ca0
- 8002c60:	08002ca0 	.word	0x08002ca0
- 8002c64:	08002ca4 	.word	0x08002ca4
+#include "main.h"
 
-08002c68 <_init>:
- 8002c68:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
- 8002c6a:	bf00      	nop
- 8002c6c:	bcf8      	pop	{r3, r4, r5, r6, r7}
- 8002c6e:	bc08      	pop	{r3}
- 8002c70:	469e      	mov	lr, r3
- 8002c72:	4770      	bx	lr
 
-08002c74 <_fini>:
- 8002c74:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
- 8002c76:	bf00      	nop
- 8002c78:	bcf8      	pop	{r3, r4, r5, r6, r7}
- 8002c7a:	bc08      	pop	{r3}
- 8002c7c:	469e      	mov	lr, r3
- 8002c7e:	4770      	bx	lr
+void buzzer_init()
+{
+ 8002c14:	b480      	push	{r7}
+ 8002c16:	af00      	add	r7, sp, #0
+
+}
+ 8002c18:	bf00      	nop
+ 8002c1a:	46bd      	mov	sp, r7
+ 8002c1c:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8002c20:	4770      	bx	lr
+
+08002c22 <init_hardware>:
+#include "hardware.h"
+
+#include "buzzer.h"
+
+void init_hardware()
+{
+ 8002c22:	b580      	push	{r7, lr}
+ 8002c24:	af00      	add	r7, sp, #0
+	buzzer_init();
+ 8002c26:	f7ff fff5 	bl	8002c14 <buzzer_init>
+}
+ 8002c2a:	bf00      	nop
+ 8002c2c:	bd80      	pop	{r7, pc}
+
+08002c2e <memset>:
+ 8002c2e:	4402      	add	r2, r0
+ 8002c30:	4603      	mov	r3, r0
+ 8002c32:	4293      	cmp	r3, r2
+ 8002c34:	d100      	bne.n	8002c38 <memset+0xa>
+ 8002c36:	4770      	bx	lr
+ 8002c38:	f803 1b01 	strb.w	r1, [r3], #1
+ 8002c3c:	e7f9      	b.n	8002c32 <memset+0x4>
+	...
+
+08002c40 <__libc_init_array>:
+ 8002c40:	b570      	push	{r4, r5, r6, lr}
+ 8002c42:	4d0d      	ldr	r5, [pc, #52]	@ (8002c78 <__libc_init_array+0x38>)
+ 8002c44:	4c0d      	ldr	r4, [pc, #52]	@ (8002c7c <__libc_init_array+0x3c>)
+ 8002c46:	1b64      	subs	r4, r4, r5
+ 8002c48:	10a4      	asrs	r4, r4, #2
+ 8002c4a:	2600      	movs	r6, #0
+ 8002c4c:	42a6      	cmp	r6, r4
+ 8002c4e:	d109      	bne.n	8002c64 <__libc_init_array+0x24>
+ 8002c50:	4d0b      	ldr	r5, [pc, #44]	@ (8002c80 <__libc_init_array+0x40>)
+ 8002c52:	4c0c      	ldr	r4, [pc, #48]	@ (8002c84 <__libc_init_array+0x44>)
+ 8002c54:	f000 f818 	bl	8002c88 <_init>
+ 8002c58:	1b64      	subs	r4, r4, r5
+ 8002c5a:	10a4      	asrs	r4, r4, #2
+ 8002c5c:	2600      	movs	r6, #0
+ 8002c5e:	42a6      	cmp	r6, r4
+ 8002c60:	d105      	bne.n	8002c6e <__libc_init_array+0x2e>
+ 8002c62:	bd70      	pop	{r4, r5, r6, pc}
+ 8002c64:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8002c68:	4798      	blx	r3
+ 8002c6a:	3601      	adds	r6, #1
+ 8002c6c:	e7ee      	b.n	8002c4c <__libc_init_array+0xc>
+ 8002c6e:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8002c72:	4798      	blx	r3
+ 8002c74:	3601      	adds	r6, #1
+ 8002c76:	e7f2      	b.n	8002c5e <__libc_init_array+0x1e>
+ 8002c78:	08002cc0 	.word	0x08002cc0
+ 8002c7c:	08002cc0 	.word	0x08002cc0
+ 8002c80:	08002cc0 	.word	0x08002cc0
+ 8002c84:	08002cc4 	.word	0x08002cc4
+
+08002c88 <_init>:
+ 8002c88:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8002c8a:	bf00      	nop
+ 8002c8c:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8002c8e:	bc08      	pop	{r3}
+ 8002c90:	469e      	mov	lr, r3
+ 8002c92:	4770      	bx	lr
+
+08002c94 <_fini>:
+ 8002c94:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8002c96:	bf00      	nop
+ 8002c98:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8002c9a:	bc08      	pop	{r3}
+ 8002c9c:	469e      	mov	lr, r3
+ 8002c9e:	4770      	bx	lr

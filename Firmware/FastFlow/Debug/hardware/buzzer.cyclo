@@ -1,2 +1,3 @@
-../hardware/buzzer.c:4:6:buzzer_init	1
-../hardware/buzzer.c:9:6:buzzer_beep	1
+../hardware/buzzer.c:6:6:buzzer_init	1
+../hardware/buzzer.c:11:6:buzzer_on	1
+../hardware/buzzer.c:16:6:buzzer_off	1
