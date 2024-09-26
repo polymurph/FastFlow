@@ -69,6 +69,8 @@ void Error_Handler(void);
 #define ENCODER_A_GPIO_Port GPIOA
 #define ENCODER_B_Pin GPIO_PIN_7
 #define ENCODER_B_GPIO_Port GPIOA
+#define ENCODER_BUTTON_Pin GPIO_PIN_4
+#define ENCODER_BUTTON_GPIO_Port GPIOC
 #define DOOR_CLOSED_Pin GPIO_PIN_9
 #define DOOR_CLOSED_GPIO_Port GPIOC
 #define HEATER_PWM_Pin GPIO_PIN_8

@@ -28,5 +28,6 @@
 "./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o"
 "./app/fastFlow.o"
 "./hardware/buzzer.o"
+"./hardware/encoder.o"
 "./hardware/hardware.o"
 "./hardware/oven.o"

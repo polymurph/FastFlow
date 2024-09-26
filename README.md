@@ -44,9 +44,14 @@ USART_TX PA2
 ENCODER_A PA6
 ENCODER_B PA7
 
+ENCODER_BUTTON PC4
+
 #### 16x2 LCD or equivalent
 
 #### Buzzer
 
 BUZZER_PWM PB6
+
+#### LED
+
 
