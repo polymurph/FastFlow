@@ -10,6 +10,8 @@ typedef enum{
 	MOVED_COUNTERCLOCKWISE
 }encoder_movement_t;
 
+void encoder_init();
+
 bool encoder_readPushButton();
 
 encoder_movement_t encoder_read();

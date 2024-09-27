@@ -7,6 +7,11 @@
 
 const uint32_t _c_debounce_tick_delay = 10;
 
+void encoder_init()
+{
+	HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+}
+
 bool encoder_readPushButton()
 {
 	static uint32_t lastTick = 0;

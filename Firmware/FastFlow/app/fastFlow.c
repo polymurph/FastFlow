@@ -11,6 +11,7 @@ void fastFlow_run()
 	uint8_t helloWorld_msg[] = "Hello, World!\n\r";
 	uint8_t turnedRight_msg[] = "Turned Right!\n\r";
 	uint8_t turnedLeft_msg[] = "Turned Left!\n\r";
+	uint8_t buttonPressed_msg[] = "Button pressed!\n\r";
 
 	init_hardware();
 
@@ -30,6 +31,10 @@ void fastFlow_run()
 
 			default:
 				break;
+		}
+
+		if(encoder_readPushButton()){
+			HAL_UART_Transmit(&huart2, buttonPressed_msg, sizeof(buttonPressed_msg) - 1, 1000);
 		}
 
 		HAL_Delay(100);
