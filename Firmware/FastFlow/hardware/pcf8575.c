@@ -14,7 +14,7 @@ void pcf8575_init(
 		uint8_t port1)
 {
 	// init objects
-	object->address = (pcf8575_I2CaddrBase | (pcf8575_I2CaddrMask & i2cAddress)) << 1;
+	object->address = (pcf8575_I2CaddrBase | (i2cAddress & pcf8575_I2CaddrMask)) << 1;
 	object->_i2cRead = i2cRead;
 	object->_i2cWrite = i2cWrite;
 	object->_port0Buf = port0;

@@ -13,6 +13,8 @@
 #include "display.h"
 #include "pcf8575.h"
 
+#include "stm32f4xx_hal_i2c.h"
+
 
 void _i2cWrite(uint8_t address, uint8_t* data,uint8_t len);
 void _i2cRead(uint8_t address, uint8_t* data,uint8_t len);
@@ -56,11 +58,12 @@ void fastFlow_run()
 
 
 	// Reset I2C1 Peripheral
-	__HAL_RCC_I2C1_FORCE_RESET();
-	__HAL_RCC_I2C1_RELEASE_RESET();
+	//__HAL_RCC_I2C1_FORCE_RESET();
+	//__HAL_RCC_I2C1_RELEASE_RESET();
 
 	// Re-initialize I2C1
 	HAL_I2C_DeInit(&hi2c1);
+	HAL_I2C_MspInit(&hi2c1);
 	HAL_I2C_Init(&hi2c1);
 
 
@@ -97,13 +100,21 @@ void fastFlow_run()
 		HAL_Delay(100);
 		*/
 		//pcf8575_togglePin(&ioexpander, PCF8575_IOPORT_1, 0);
-		if(HAL_I2C_Master_Transmit(&hi2c1, 0x20 << 1, data_0, 2, 0)!=HAL_OK){
+		/*
+		pcf8575_writePin(&ioexpander, PCF8575_IOPORT_1, 0,1);
+		HAL_Delay(1000);
+		pcf8575_writePin(&ioexpander, PCF8575_IOPORT_1, 0,0);
+		HAL_Delay(1000);
+		*/
+
+		if(HAL_I2C_Master_Transmit(&hi2c1, 0x20 << 1, data_0, 2, 1000)!=HAL_OK){
 			while(1);
 		}
 		HAL_Delay(1000);
-		if(HAL_I2C_Master_Transmit(&hi2c1, 0x20 << 1, data_1, 2, 0)!=HAL_OK){
+		if(HAL_I2C_Master_Transmit(&hi2c1, 0x20 << 1, data_1, 2, 1000)!=HAL_OK){
 			while(1);
 		}
+
 		HAL_Delay(1000);
 	}
 }
