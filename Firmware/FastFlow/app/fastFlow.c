@@ -2,6 +2,8 @@
 #include "hardware.h"
 
 #include <stdint.h>
+#include <stdbool.h>
+
 #include "usart.h"
 
 #include "encoder.h"
@@ -38,7 +40,7 @@ void fastFlow_run()
 
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-	pcf8575_init(&ioexpander, 0x00, _i2cRead, _i2cWrite, 0x00, 0x00);
+	pcf8575_init(&ioexpander, 0x20, _i2cRead, _i2cWrite, 0xFF, 0xFF);
 
 	init_hardware();
 
@@ -100,13 +102,14 @@ void fastFlow_run()
 		HAL_Delay(100);
 		*/
 		//pcf8575_togglePin(&ioexpander, PCF8575_IOPORT_1, 0);
-		/*
-		pcf8575_writePin(&ioexpander, PCF8575_IOPORT_1, 0,1);
-		HAL_Delay(1000);
-		pcf8575_writePin(&ioexpander, PCF8575_IOPORT_1, 0,0);
-		HAL_Delay(1000);
-		*/
 
+		pcf8575_writePin(&ioexpander, PCF8575_IOPORT_1, 0,true);
+		HAL_Delay(1000);
+		pcf8575_writePin(&ioexpander, PCF8575_IOPORT_1, 0,false);
+		HAL_Delay(1000);
+
+
+		/*
 		if(HAL_I2C_Master_Transmit(&hi2c1, 0x20 << 1, data_0, 2, 1000)!=HAL_OK){
 			while(1);
 		}
@@ -114,17 +117,17 @@ void fastFlow_run()
 		if(HAL_I2C_Master_Transmit(&hi2c1, 0x20 << 1, data_1, 2, 1000)!=HAL_OK){
 			while(1);
 		}
-
 		HAL_Delay(1000);
+		*/
 	}
 }
 
 void _i2cWrite(uint8_t address, uint8_t* data,uint8_t len)
 {
-	HAL_I2C_Master_Transmit(&hi2c1, address, data, len, 0);
+	HAL_I2C_Master_Transmit(&hi2c1, address, data, len, 10000);
 }
 
 void _i2cRead(uint8_t address, uint8_t* data, uint8_t len)
 {
-	HAL_I2C_Master_Receive(&hi2c1, address, data, len, 0);
+	HAL_I2C_Master_Receive(&hi2c1, address, data, len, 10000);
 }

@@ -68,10 +68,10 @@ void pcf8575_writePin(
 		pBuf = &(object->_port1Buf);
 	}
 
-	*pBuf &= 1 <<~pin;
+	*pBuf &= ~(1 << pin);
 
 	if(state){
-		*pBuf |= state <<~pin;
+		*pBuf |= state << pin;
 	}
 
 	_updatePorts(object);
