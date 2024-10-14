@@ -3,6 +3,8 @@
 
 void buzzer_init();
 
-void buzzer_beep();
+void buzzer_turnOn();
+
+void buzzer_turnOff();
 
 #endif // _BUZZER_H_

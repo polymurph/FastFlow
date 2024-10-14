@@ -48,6 +48,13 @@ encoder_movement_t encoder_read()
 
 	previousEncoderPosition = encoderPosition;
 
+	if(encoderDiff > 6 || encoderDiff < -6){
+		if(encoderDiff > 0){
+				return MOVED_CLOCKWISE_FAST;
+		}
+		return MOVED_COUNTERCLOCKWISE_FAST;
+	}
+
 	if(encoderDiff > 0){
 		return MOVED_CLOCKWISE;
 	}

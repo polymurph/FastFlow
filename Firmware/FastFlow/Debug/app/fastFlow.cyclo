@@ -1,1 +1,3 @@
-../app/fastFlow.c:9:6:fastFlow_run	4
+../app/fastFlow.c:21:6:fastFlow_run	3
+../app/fastFlow.c:111:6:_i2cWrite	1
+../app/fastFlow.c:116:6:_i2cRead	1

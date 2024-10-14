@@ -1,0 +1,9 @@
+../hardware/pcf8575.c:8:6:pcf8575_init	1
+../hardware/pcf8575.c:27:6:pcf8575_writePort	2
+../hardware/pcf8575.c:41:9:pcf8575_readPort	2
+../hardware/pcf8575.c:55:6:pcf8575_writePin	3
+../hardware/pcf8575.c:80:6:pcf8575_readPin	2
+../hardware/pcf8575.c:98:6:pcf8575_togglePin	2
+../hardware/pcf8575.c:117:6:_read	1
+../hardware/pcf8575.c:122:6:_write	1
+../hardware/pcf8575.c:127:6:_updatePorts	1

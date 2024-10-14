@@ -5,6 +5,7 @@ Reflow Oven Controller
 
 ### STM32F411 (Nucleo-64)
 
+[pinout](https://os.mbed.com/platforms/ST-Nucleo-F411RE/)
 
 ## Features
 
@@ -46,12 +47,25 @@ ENCODER_B PA7
 
 ENCODER_BUTTON PC4
 
-#### 16x2 LCD or equivalent
+#### 16x244 LCD or equivalent
+
+[1604A](https://www.farnell.com/datasheets/50577.pdf)
+
+EA W164B-NLW
+
+<img src=".\docu\pics\display_1604-A.JPG" width="400" height="auto">
+
+<img src=".\docu\pics\pinout_1604-A.JPG" width="400" height="auto">
 
 #### Buzzer
 
 BUZZER_PWM PB6
 
+[PWM](https://www.youtube.com/watch?v=k1jHQ7oW4Uw)
 #### LED
+
+## Info
+
+[DMA](https://www.youtube.com/watch?v=pMbMRMbdOX8)
 
 
