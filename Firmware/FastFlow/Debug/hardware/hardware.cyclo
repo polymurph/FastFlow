@@ -1,1 +1,8 @@
-../hardware/hardware.c:7:6:init_hardware	1
+../hardware/hardware.c:27:6:init_hardware	5
+../hardware/hardware.c:146:6:_i2cWrite	1
+../hardware/hardware.c:151:6:_i2cRead	1
+../hardware/hardware.c:158:6:_disp_enable	1
+../hardware/hardware.c:163:6:_disp_delay	1
+../hardware/hardware.c:168:6:_disp_writePort	1
+../hardware/hardware.c:173:6:_disp_readWrite	1
+../hardware/hardware.c:178:6:_disp_regSelect	1

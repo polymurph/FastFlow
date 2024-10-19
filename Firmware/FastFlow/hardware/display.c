@@ -53,6 +53,12 @@ uint8_t _requestPipeline[3][32];
 
 displayStateMachine_modes_t _displayStateMachineMode = setCursorToTop;
 
+display_delay _delay;
+display_writePort _writePort;
+display_readWrite _readWrite;
+display_enable _enable;
+display_regSelect _regSelect;
+
 void _setCursorPosition(uint8_t row, uint8_t column);
 void _requestHandled();
 void _placeRequest(uint8_t mode, uint8_t var1, uint8_t var2);
@@ -62,8 +68,19 @@ void _writeToDisplay();
 void _updateDisplayArray();
 
 
-void display_init()
+void display_init(
+		display_delay delay,
+		display_writePort writePort,
+		display_readWrite readWrite,
+		display_enable enable,
+		display_regSelect regSelect)
 {
+	_delay = delay;
+	_writePort = writePort;
+	_readWrite = readWrite;
+	_enable = enable;
+	_regSelect = regSelect;
+
 	_displayCursorRow = 0;
 	_displayCursorIndex = 0;
 
@@ -74,10 +91,10 @@ void display_init()
 	display_request(UPDATE_DISPLAY,0,0);
 }
 
-void display_updateRoutine()
+bool display_updateRoutine()
 {
 	// check for new job
-	if(!(_workIndex != _writeIndex)) return;
+	if(!(_workIndex != _writeIndex)) return false;
 
 	switch (_requestPipeline[0][_workIndex+1]) {
 
@@ -132,6 +149,7 @@ void display_updateRoutine()
 		default:
 		break;
 	};
+	return true;
 }
 
 void display_request(
@@ -266,34 +284,44 @@ void _writeCommandToDisplay(uint8_t cmd)
 	//while(read_busy_pin() & PIN_BUSY);
 
 	//clear register select pin
-	HAL_GPIO_WritePin(DISPLAY_REGISTER_SELECT_GPIO_Port, DISPLAY_REGISTER_SELECT_Pin, 0);
+	//HAL_GPIO_WritePin(DISPLAY_REGISTER_SELECT_GPIO_Port, DISPLAY_REGISTER_SELECT_Pin, 0);
+	_regSelect(false);
 
 	//set mode write to display
-	HAL_GPIO_WritePin(DISPLAY_READ_WRITE_GPIO_Port, DISPLAY_READ_WRITE_Pin, 0);
+	//HAL_GPIO_WritePin(DISPLAY_READ_WRITE_GPIO_Port, DISPLAY_READ_WRITE_Pin, 0);
+	_readWrite(false);
 
 	//set enable pin
-	HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 1);
+	//HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 1);
+	_enable(true);
 
 	//for(i=0 ; i< 100/*42,43,44,45*/;i++){}
-	HAL_Delay(_delay_ms);
+	//HAL_Delay(_delay_ms);
+	_delay();
 
-	GPIOB->ODR &= 0xF403;
-	GPIOB->ODR |= (cmd & 0x07) | ((cmd & 0x08) << 10) | ((cmd & 0xF0) << 12);
+	//GPIOB->ODR &= 0xF403;
+	//GPIOB->ODR |= (cmd & 0x07) | ((cmd & 0x08) << 10) | ((cmd & 0xF0) << 12);
+	_writePort(cmd);
 
 	//for(i=0 ; i< 100/*42,43,44,45*/;i++){}
-	HAL_Delay(_delay_ms);
+	//HAL_Delay(_delay_ms);
+	_delay();
 
 	//clear enable pin
-	HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 0);
+	//HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 0);
+	_enable(false);
 
 	//for(i=0 ; i< 50/*42,43,44,45*/;i++){}
-	HAL_Delay(_delay_ms);
+	//HAL_Delay(_delay_ms);
+	_delay();
 
 	//set resgister select pin
-	HAL_GPIO_WritePin(DISPLAY_REGISTER_SELECT_GPIO_Port, DISPLAY_REGISTER_SELECT_Pin, 1);
+	//HAL_GPIO_WritePin(DISPLAY_REGISTER_SELECT_GPIO_Port, DISPLAY_REGISTER_SELECT_Pin, 1);
+	_regSelect(true);
 
 	//for(i=0 ; i< 50/*42,43,44,45*/;i++){}
-	HAL_Delay(_delay_ms);
+	//HAL_Delay(_delay_ms);
+	_delay();
 }
 
 void _writeCharToDisplay(char data)
@@ -303,30 +331,39 @@ void _writeCharToDisplay(char data)
 	uint8_t i=0;
 
 	//set enable pin
-	HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 1);
+	//HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 1);
+	_enable(true);
+
 
 	//for(i=0 ; i< 50;i++){}
-	HAL_Delay(_delay_ms);
+	//HAL_Delay(_delay_ms);
+	_delay();
 
 	//set mode write to display
-	HAL_GPIO_WritePin(DISPLAY_READ_WRITE_GPIO_Port, DISPLAY_READ_WRITE_Pin, 0);
+	//HAL_GPIO_WritePin(DISPLAY_READ_WRITE_GPIO_Port, DISPLAY_READ_WRITE_Pin, 0);
+	_readWrite(false);
 
 	//asm volatile ("nop");
 
 	//for(i=0 ; i< 100;i++){}
-	HAL_Delay(_delay_ms);
+	//HAL_Delay(_delay_ms);
+	_delay();
 
-	GPIOB->ODR &= 0xF403;
-	GPIOB->ODR |= (data & 0x07) | ((data & 0x08) << 10) | ((data & 0xF0) << 12);
+	//GPIOB->ODR &= 0xF403;
+	//GPIOB->ODR |= (data & 0x07) | ((data & 0x08) << 10) | ((data & 0xF0) << 12);
+	_writePort(data);
 
 	//for(i=0 ; i< 100;i++){}
-	HAL_Delay(_delay_ms);
+	//HAL_Delay(_delay_ms);
+	_delay();
 
 	//clear enable pin
-	HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 0);
+	//HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 0);
+	_enable(false);
 
 	//for(i=0 ; i< 50;i++){}
-	HAL_Delay(1);
+	//HAL_Delay(1);
+	_delay();
 #if 0
 	//while(read_busy_pin() & PIN_BUSY);
 	uint8_t i=0;

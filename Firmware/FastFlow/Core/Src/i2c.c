@@ -80,7 +80,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* I2C1 clock enable */
-#if 1
+
     // http://www.sonsivri.to/forum/index.php?topic=62967.0
     __HAL_RCC_I2C1_CLK_ENABLE();
   /* USER CODE BEGIN I2C1_MspInit 1 */
@@ -90,7 +90,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
 
     // https://community.st.com/t5/stm32-mcus-products/stm32f4-i2c-issues-solved/td-p/526774
     // https://github.com/wokwi/wokwi-features/issues/744
-#endif
+
   /* USER CODE END I2C1_MspInit 1 */
   }
 }

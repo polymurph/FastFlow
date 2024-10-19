@@ -18,8 +18,8 @@
 #include "stm32f4xx_hal_i2c.h"
 
 
-void _i2cWrite(uint8_t address, uint8_t* data,uint8_t len);
-void _i2cRead(uint8_t address, uint8_t* data,uint8_t len);
+//void _i2cWrite(uint8_t address, uint8_t* data,uint8_t len);
+//void _i2cRead(uint8_t address, uint8_t* data,uint8_t len);
 
 
 void fastFlow_run()
@@ -36,25 +36,29 @@ void fastFlow_run()
 
 	uint8_t dump[2] = {0};
 
-	pcf8575_t ioexpander;
+	//pcf8575_t ioexpander;
 
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-	pcf8575_init(&ioexpander, 0x20, _i2cRead, _i2cWrite, 0xFF, 0xFF);
+	//pcf8575_init(&ioexpander, 0x20, _i2cRead, _i2cWrite, 0xFF, 0xFF);
 
-	init_hardware();
+
 
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
 
 	HAL_UART_Transmit(&huart2, helloWorld_msg, sizeof(helloWorld_msg) - 1, 1000);
 
 
+
+	/*
 	GPIO_InitStruct.Pin = GPIO_PIN_7 | GPIO_PIN_8;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD; // Open-Drain Alternate Function
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	GPIO_InitStruct.Alternate = GPIO_AF4_I2C1; // AF4 for I2C1
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+*/
 
 	//HAL_I2C_Master_Receive(&hi2c1, 0x02 << 1, dump, 2, 0);
 
@@ -67,6 +71,8 @@ void fastFlow_run()
 	HAL_I2C_DeInit(&hi2c1);
 	HAL_I2C_MspInit(&hi2c1);
 	HAL_I2C_Init(&hi2c1);
+
+	init_hardware();
 
 
 	while(1){
@@ -102,13 +108,13 @@ void fastFlow_run()
 		HAL_Delay(100);
 		*/
 		//pcf8575_togglePin(&ioexpander, PCF8575_IOPORT_1, 0);
-
+#if 0
 		pcf8575_writePin(&ioexpander, PCF8575_IOPORT_1, 0,true);
 		HAL_Delay(1000);
 		pcf8575_writePin(&ioexpander, PCF8575_IOPORT_1, 0,false);
 		HAL_Delay(1000);
 
-
+#endif
 		/*
 		if(HAL_I2C_Master_Transmit(&hi2c1, 0x20 << 1, data_0, 2, 1000)!=HAL_OK){
 			while(1);
@@ -122,6 +128,7 @@ void fastFlow_run()
 	}
 }
 
+/*
 void _i2cWrite(uint8_t address, uint8_t* data,uint8_t len)
 {
 	HAL_I2C_Master_Transmit(&hi2c1, address, data, len, 10000);
@@ -131,3 +138,4 @@ void _i2cRead(uint8_t address, uint8_t* data, uint8_t len)
 {
 	HAL_I2C_Master_Receive(&hi2c1, address, data, len, 10000);
 }
+*/

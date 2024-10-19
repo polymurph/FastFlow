@@ -29,6 +29,15 @@
 #define _DISPLAY_H_
 
 #include <stdint.h>
+#include <stdbool.h>
+
+typedef void(*display_delay)();
+typedef void(*display_writePort)(uint8_t);
+typedef void(*display_readWrite)(bool);
+typedef void(*display_regSelect)(bool);
+typedef void(*display_enable)(bool);
+
+
 
 typedef enum{
 	SET_CURSOR_POSITION,
@@ -46,12 +55,24 @@ enum cursor_modes_e
 	AUTO_INCREMENT
 };
 
+typedef struct{
+	display_delay delay;
+	display_writePort writePort;
+	display_readWrite readWrite;
+	display_enable enable;
+}display_t;
+
 /**
  * @brief Initialize display
  * To use this function display_update() must be active.
  *
  */
-void display_init();
+void display_init(
+		display_delay delay,
+		display_writePort writePort,
+		display_readWrite readWrite,
+		display_enable enable,
+		display_regSelect regSelect);
 
 /**
  * display update routine
@@ -61,7 +82,7 @@ void display_init();
  * All the requests placed by @ref display_request and @ref display_print are handeled
  * here asynchronously from the time of request. This function should not
  */
-void display_updateRoutine();
+bool display_updateRoutine();
 
 void display_request(
 		display_cmd_t cmd,
@@ -73,6 +94,5 @@ void display_print(
 		uint8_t len,
 		uint8_t row,
 		uint8_t column);
-
 
 #endif //_DISPLAY_H_

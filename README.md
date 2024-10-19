@@ -66,6 +66,27 @@ BUZZER_PWM PB6
 
 ## Info
 
+### DMA
+
 [DMA](https://www.youtube.com/watch?v=pMbMRMbdOX8)
 
 
+### I2C
+
+init problem
+
+inside the function ```HAL_I2C_MspInit``` provided by the
+Stm Cube MX the following code must be executed at the end
+of the program in the user code section.
+
+```c
+__HAL_RCC_I2C1_CLK_ENABLE();
+/* USER CODE BEGIN I2C1_MspInit 1 */
+__HAL_RCC_I2C1_FORCE_RESET();
+HAL_Delay(100);
+__HAL_RCC_I2C1_RELEASE_RESET();
+```
+
+[source1](http://www.sonsivri.to/forum/index.php?topic=62967.0)
+[source2](https://community.st.com/t5/stm32-mcus-products/stm32f4-i2c-issues-solved/td-p/526774)
+[source3](https://github.com/wokwi/wokwi-features/issues/744)
