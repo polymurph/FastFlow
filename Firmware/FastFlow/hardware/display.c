@@ -43,8 +43,8 @@ static const uint8_t _sc_signarrowLeft = 0x7F;
 volatile uint8_t _displayCursorRow = 0;
 volatile uint8_t _displayCursorIndex= 0;
 
-char _displayOutputArrayMirror[64];
-static char _displayOutputArray[64];
+char _displayOutputArrayMirror[64] = {0xFF};
+static char _displayOutputArray[64] = {0xFF};
 
 uint8_t _writeIndex = 0;
 uint8_t _workIndex = 0;
