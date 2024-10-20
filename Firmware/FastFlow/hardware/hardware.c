@@ -15,6 +15,12 @@ pcf8575_t ioexpander;
 
 display_t display;
 
+const uint32_t c_displayRefreshRateNTick = 50;
+const uint32_t c_encoderRefreshRateNTick = 180;
+const uint32_t c_LEDRefreshRateNTick = 250;
+
+
+
 // interface functions pcf8575
 void _i2cWrite(uint8_t address, uint8_t* data,uint8_t len);
 void _i2cRead(uint8_t address, uint8_t* data,uint8_t len);
@@ -32,6 +38,11 @@ void init_hardware()
 	uint8_t i = 0;
 	uint8_t rowIndex = 0;
 	uint8_t rowIndex_old = 0;
+
+	uint32_t tickNow = HAL_GetTick();
+	uint32_t displayLastTick = tickNow;
+	uint32_t encoderLastTick = tickNow;
+	uint32_t LEDLastTick = tickNow;
 
 	char clear[] = "                                                                ";
 	char text[] = "         haha";
@@ -65,61 +76,48 @@ void init_hardware()
 
 	display_print(&display, clear, sizeof(clear), 0, 0);
 	display_request(&display, SET_CURSOR_POSITION, 0, 0);
+
+
 	while(display_updateRoutine(&display));
 
 
-
-#if 0
-	//display_request(SET_CURSOR_MODE, VISIBLE_BLINK, 0);
-
-	while(display_updateRoutine());
-
-	//display_request(SET_FUNCTION,0,0);
-	display_request(SET_CURSOR_MODE, BLINK, 0);
-	//display_request(UPDATE_DISPLAY,0,0);
-	//display_request(UPDATE_DISPLAY, 0, 0);
-	while(display_updateRoutine());
-
-	display_request(SET_CURSOR_POSITION, 3, 8);
-		//display_request(UPDATE_DISPLAY,0,0);
-		//display_request(UPDATE_DISPLAY, 0, 0);
-	while(display_updateRoutine());
-
-	//display_print(clear, sizeof(clear), 0, 0);
-	//display_print(clear, sizeof(clear), 1, 0);
-	//display_print(clear, sizeof(clear), 2, 0);
-	//display_print(clear, sizeof(clear), 3, 0);
-	//display_request(SET_CURSOR_POSITION, 0, 0);
-
-	//display_request(UPDATE_DISPLAY,0,0);
-	//display_request(UPDATE_DISPLAY, 0, 0);
-	//while(display_updateRoutine());
-
-
-#endif
-
 	while(1){
-		switch(encoder_read()){
-			case MOVED_COUNTERCLOCKWISE:
-				HAL_UART_Transmit(&huart2, turnedLeft_msg, sizeof(turnedLeft_msg) - 1, 1000);
-				rowIndex--;
-				break;
+		tickNow = HAL_GetTick();
 
-			case MOVED_CLOCKWISE:
-				HAL_UART_Transmit(&huart2, turnedRight_msg, sizeof(turnedRight_msg) - 1, 1000);
-				rowIndex++;
-				break;
-			default:
-				break;
+
+		if(tickNow - encoderLastTick > c_encoderRefreshRateNTick){
+			encoderLastTick = tickNow;
+			switch(encoder_read()){
+				case MOVED_CLOCKWISE:
+					HAL_UART_Transmit(&huart2, turnedLeft_msg, sizeof(turnedLeft_msg) - 1, 1000);
+					rowIndex--;
+					break;
+
+				case MOVED_COUNTERCLOCKWISE:
+					HAL_UART_Transmit(&huart2, turnedRight_msg, sizeof(turnedRight_msg) - 1, 1000);
+					rowIndex++;
+					break;
+				default:
+					break;
+			}
+			rowIndex &= 0x03;
+			if(rowIndex != rowIndex_old){
+				display_request(&display, SET_CURSOR_POSITION, rowIndex, 0);
+				//while(display_updateRoutine(&display));
+				rowIndex_old = rowIndex;
+			}
 		}
-		rowIndex &= 0x03;
-		if(rowIndex != rowIndex_old){
-			display_request(&display, SET_CURSOR_POSITION, rowIndex, 0);
-			while(display_updateRoutine(&display));
-			rowIndex_old = rowIndex;
+
+		if(tickNow - LEDLastTick > c_LEDRefreshRateNTick){
+			LEDLastTick = tickNow;
+			pcf8575_togglePin(&ioexpander, PCF8575_IOPORT_0, 7);
 		}
-		pcf8575_togglePin(&ioexpander, PCF8575_IOPORT_0, 7);
-		HAL_Delay(100);
+
+
+		if(tickNow - displayLastTick > c_displayRefreshRateNTick){
+			displayLastTick = tickNow;
+			display_updateRoutine(&display);
+		}
 	}
 }
 
@@ -144,7 +142,9 @@ void _disp_enable(bool state)
 
 void _disp_delay()
 {
-	HAL_Delay(1);
+	uint32_t i = 500;
+	for(;i>0;i--);
+	//HAL_Delay(1);
 }
 
 void _disp_writePort(uint8_t data)

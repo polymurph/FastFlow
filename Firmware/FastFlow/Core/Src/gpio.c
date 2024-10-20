@@ -51,13 +51,6 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, DISPLAY_D0_Pin|DISPLAY_D1_Pin|DISPLAY_D2_Pin|DISPLAY_D3_Pin
-                          |DISPLAY_D4_Pin|DISPLAY_D5_Pin|DISPLAY_D6_Pin|DISPLAY_D7_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, DISPLAY_READ_WRITE_Pin|DISPLAY_REGISTER_SELECT_Pin|DISPLAY_ENABLE_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SPI3_CS_MAX31865_GPIO_Port, SPI3_CS_MAX31865_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PtPin */
@@ -70,22 +63,6 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = ENCODER_BUTTON_Pin|DOOR_CLOSED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PBPin PBPin PBPin PBPin
-                           PBPin PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = DISPLAY_D0_Pin|DISPLAY_D1_Pin|DISPLAY_D2_Pin|DISPLAY_D3_Pin
-                          |DISPLAY_D4_Pin|DISPLAY_D5_Pin|DISPLAY_D6_Pin|DISPLAY_D7_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PCPin PCPin PCPin */
-  GPIO_InitStruct.Pin = DISPLAY_READ_WRITE_Pin|DISPLAY_REGISTER_SELECT_Pin|DISPLAY_ENABLE_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
