@@ -5,15 +5,6 @@
 
 #include "stm32f4xx_hal.h"
 
-static const uint8_t _delay_ms = 10;
-
-typedef enum{
-	setCursorToTop,
-	firstLines,
-	setCursorToMiddle,
-	secondLines
-}displayStateMachine_modes_t;
-
 #if 0
 //hardware pin defines
 #define DISPLAY_SIGNAL_ENABLE	PINB0
@@ -59,22 +50,24 @@ display_readWrite _readWrite;
 display_enable _enable;
 display_regSelect _regSelect;
 
-void _setCursorPosition(uint8_t row, uint8_t column);
-void _requestHandled();
-void _placeRequest(uint8_t mode, uint8_t var1, uint8_t var2);
-void _writeCommandToDisplay(uint8_t cmd);
-void _writeCharToDisplay(char data);
-void _writeToDisplay();
-void _updateDisplayArray();
+void _setCursorPosition(display_t *object, uint8_t row, uint8_t column);
+void _requestHandled(display_t *object);
+void _placeRequest(display_t *object, uint8_t mode, uint8_t var1, uint8_t var2);
+void _writeCommandToDisplay(display_t *object, uint8_t cmd);
+void _writeCharToDisplay(display_t *object, char data);
+void _writeToDisplay(display_t *object);
+void _updateDisplayArray(display_t *object);
 
 
 void display_init(
+		display_t *object,
 		display_delay delay,
 		display_writePort writePort,
 		display_readWrite readWrite,
 		display_enable enable,
 		display_regSelect regSelect)
 {
+	/*
 	_delay = delay;
 	_writePort = writePort;
 	_readWrite = readWrite;
@@ -83,67 +76,82 @@ void display_init(
 
 	_displayCursorRow = 0;
 	_displayCursorIndex = 0;
+*/
+	object->delay = delay;
+	object->writePort = writePort;
+	object->readWrite =readWrite;
+	object->enable = enable;
+	object->regSelect = regSelect;
 
-	display_request(SET_FUNCTION, 0, 0);
+	object->cursorRow = 0;
+	object->cursorIndex = 0;
+
+	object->writeIndex = 0;
+	object->workIndex = 0;
+
+	display_request(object,SET_FUNCTION, 0, 0);
 	//display_request(SET_CURSOR_MODE,INVISIBLE,0);
-	display_request(SET_CURSOR_MODE,BLINK,0);
-	display_request(SET_CURSOR_MODE,AUTO_INCREMENT,0);
-	display_request(UPDATE_DISPLAY,0,0);
+	display_request(object,SET_CURSOR_MODE,BLINK,0);
+	display_request(object,SET_CURSOR_MODE,AUTO_INCREMENT,0);
+	display_request(object,UPDATE_DISPLAY,0,0);
 }
 
-bool display_updateRoutine()
+bool display_updateRoutine(display_t *object)
 {
+	uint8_t _wIndex;
 	// check for new job
-	if(!(_workIndex != _writeIndex)) return false;
+	if(!(object->workIndex != object->writeIndex)) return false;
 
-	switch (_requestPipeline[0][_workIndex+1]) {
+	_wIndex = object->workIndex+1;
+
+	switch (object->requestPipeline[0][_wIndex]) {
 
 		case SET_CURSOR_POSITION:
-			_setCursorPosition(_requestPipeline[1][_workIndex+1], _requestPipeline[2][_workIndex+1]);
-			_requestHandled();
+			_setCursorPosition(object, object->requestPipeline[1][_wIndex], object->requestPipeline[2][_wIndex]);
+			_requestHandled(object);
 			break;
 
 		case UPDATE_DISPLAY:
-			_writeToDisplay();
+			_writeToDisplay(object);
 			break;
 
 		case SET_CURSOR_MODE:
-			switch (_requestPipeline[1][_workIndex+1])
+			switch (object->requestPipeline[1][_wIndex])
 			{
 				case INVISIBLE:
-					_writeCommandToDisplay(CURSOR_MODE_INVISIBLE);
-					_requestHandled();
+					_writeCommandToDisplay(object, CURSOR_MODE_INVISIBLE);
+					_requestHandled(object);
 					break;
 
 				case VISIBLE:
-					_writeCommandToDisplay(CURSOR_MODE_VISIBLE);
-					_requestHandled();
+					_writeCommandToDisplay(object, CURSOR_MODE_VISIBLE);
+					_requestHandled(object);
 					break;
 
 				case BLINK:
-					_writeCommandToDisplay(CURSOR_MODE_BLINK);
-					_requestHandled();
+					_writeCommandToDisplay(object,CURSOR_MODE_BLINK);
+					_requestHandled(object);
 					break;
 
 				case VISIBLE_BLINK:
-					_writeCommandToDisplay(CURSOR_MODE_BLINK | CURSOR_MODE_INVISIBLE);
-					_requestHandled();
+					_writeCommandToDisplay(object,CURSOR_MODE_BLINK | CURSOR_MODE_INVISIBLE);
+					_requestHandled(object);
 					break;
 
 				case AUTO_INCREMENT:
-					_writeCommandToDisplay(CURSOR_MODE_AUTO_INCREMENT);
-					_requestHandled();
+					_writeCommandToDisplay(object, CURSOR_MODE_AUTO_INCREMENT);
+					_requestHandled(object);
 					break;
 
 				default:
-					_requestHandled();
+					_requestHandled(object);
 					break;
 			}
 			break;
 
 		case SET_FUNCTION:
-			_writeCommandToDisplay(DISPLAY_FUNCTION_SET);
-			_requestHandled();
+			_writeCommandToDisplay(object, DISPLAY_FUNCTION_SET);
+			_requestHandled(object);
 			break;
 
 		default:
@@ -153,21 +161,23 @@ bool display_updateRoutine()
 }
 
 void display_request(
+		display_t *object,
 		display_cmd_t cmd,
 		uint8_t var1,
 		uint8_t var2)
 {
 	if(cmd == UPDATE_DISPLAY) {
-		_updateDisplayArray();
-		_placeRequest(SET_CURSOR_POSITION, 0, 0);
-		_placeRequest(UPDATE_DISPLAY, 0, 0);
-		_placeRequest(SET_CURSOR_POSITION, 0, 15);
+		_updateDisplayArray(object);
+		_placeRequest(object, SET_CURSOR_POSITION, 0, 0);
+		_placeRequest(object, UPDATE_DISPLAY, 0, 0);
+		_placeRequest(object, SET_CURSOR_POSITION, 0, 15);
 	} else {
-		_placeRequest(cmd,var1,var2);
+		_placeRequest(object, cmd,var1,var2);
 	}
 }
 
 void display_print(
+		display_t *object,
 		char* text,
 		uint8_t len,
 		uint8_t row,
@@ -196,13 +206,13 @@ void display_print(
 			break;
 	}
 
-	memcpy(&_displayOutputArrayMirror[index],text,len);
+	memcpy(&(object->outputArrayMirror[index]),text,len);
 
-	display_request(SET_CURSOR_POSITION,row,column);
-	display_request(UPDATE_DISPLAY,0,0);
+	display_request(object, SET_CURSOR_POSITION,row,column);
+	display_request(object, UPDATE_DISPLAY,0,0);
 }
 
-void _setCursorPosition(uint8_t row, uint8_t column)
+void _setCursorPosition(display_t *object, uint8_t row, uint8_t column)
 {
 	uint8_t position = 0;
 
@@ -234,97 +244,74 @@ void _setCursorPosition(uint8_t row, uint8_t column)
 		//when column is greater than 16 or smaller then one, it is set to one
 		position |= 0;
 	}
-	_writeCommandToDisplay((position | DD_RAM_ADDR_SET));
+	_writeCommandToDisplay(object, (position | DD_RAM_ADDR_SET));
 }
 
-void _requestHandled()
+void _requestHandled(display_t *object)
 {
-	_workIndex++;
-	_workIndex &= 0x1F;
+	object->workIndex++;
+	object->workIndex &= 0x1F;
 }
 
-void _placeRequest(uint8_t mode, uint8_t var1, uint8_t var2)
+void _placeRequest(display_t *object, uint8_t mode, uint8_t var1, uint8_t var2)
 {
-	_writeIndex++;
-	_writeIndex &= 0x1F;	//overflow reset
+	uint8_t _wIndex;
+	object->writeIndex++;
+	object->writeIndex &= 0x1F;	//overflow reset
 
-	_requestPipeline[0][_writeIndex] = mode;
-	_requestPipeline[1][_writeIndex] = var1;
-	_requestPipeline[2][_writeIndex] = var2;
+	_wIndex = object->writeIndex;
+
+	object->requestPipeline[0][_wIndex] = mode;
+	object->requestPipeline[1][_wIndex] = var1;
+	object->requestPipeline[2][_wIndex] = var2;
 }
 
-void _writeCommandToDisplay(uint8_t cmd)
+void _writeCommandToDisplay(display_t *object, uint8_t cmd)
 {
-#if 0
-	uint8_t i=0;
-
-	//while(read_busy_pin() & PIN_BUSY);
-	uint8_t i=0;
-
-	CLRBIT(PORTB,DISPLAY_SIGNAL_RS);		//clear register select pin
-
-	CLRBIT(PORTB,DISPLAY_SIGNAL_RW);		//set mode write to display
-
-	SETBIT(PORTB,DISPLAY_SIGNAL_ENABLE);	//set enable pin
-
-	for(i=0 ; i< 100/*42,43,44,45*/;i++){}
-
-	PORTD = (c);
-
-	for(i=0 ; i< 100/*42,43,44,45*/;i++){}
-
-	CLRBIT(PORTB,DISPLAY_SIGNAL_ENABLE);	//clear enable pin
-
-	for(i=0 ; i< 50/*42,43,44,45*/;i++){}
-
-	SETBIT(PORTB,DISPLAY_SIGNAL_RS);		//set resgister select pin
-
-	for(i=0 ; i< 50/*42,43,44,45*/;i++){}
-#endif
 	//while(read_busy_pin() & PIN_BUSY);
 
 	//clear register select pin
 	//HAL_GPIO_WritePin(DISPLAY_REGISTER_SELECT_GPIO_Port, DISPLAY_REGISTER_SELECT_Pin, 0);
-	_regSelect(false);
+	object->regSelect(false);
 
 	//set mode write to display
 	//HAL_GPIO_WritePin(DISPLAY_READ_WRITE_GPIO_Port, DISPLAY_READ_WRITE_Pin, 0);
-	_readWrite(false);
+	object->readWrite(false);
 
 	//set enable pin
 	//HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 1);
-	_enable(true);
+	object->enable(true);
 
 	//for(i=0 ; i< 100/*42,43,44,45*/;i++){}
 	//HAL_Delay(_delay_ms);
-	_delay();
+	object->delay();
 
 	//GPIOB->ODR &= 0xF403;
 	//GPIOB->ODR |= (cmd & 0x07) | ((cmd & 0x08) << 10) | ((cmd & 0xF0) << 12);
-	_writePort(cmd);
+	object->writePort(cmd);
 
 	//for(i=0 ; i< 100/*42,43,44,45*/;i++){}
 	//HAL_Delay(_delay_ms);
-	_delay();
+	object->delay();
 
 	//clear enable pin
 	//HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 0);
-	_enable(false);
+	object->enable(false);
 
 	//for(i=0 ; i< 50/*42,43,44,45*/;i++){}
 	//HAL_Delay(_delay_ms);
-	_delay();
+	object->delay();
 
 	//set resgister select pin
 	//HAL_GPIO_WritePin(DISPLAY_REGISTER_SELECT_GPIO_Port, DISPLAY_REGISTER_SELECT_Pin, 1);
-	_regSelect(true);
+	object->regSelect(true);
 
 	//for(i=0 ; i< 50/*42,43,44,45*/;i++){}
 	//HAL_Delay(_delay_ms);
-	_delay();
+	object->delay();
 }
 
-void _writeCharToDisplay(char data)
+void _writeCharToDisplay(display_t *object, char data)
 {
 
 	//while(read_busy_pin() & PIN_BUSY);
@@ -332,131 +319,109 @@ void _writeCharToDisplay(char data)
 
 	//set enable pin
 	//HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 1);
-	_enable(true);
+	object->enable(true);
 
 
 	//for(i=0 ; i< 50;i++){}
 	//HAL_Delay(_delay_ms);
-	_delay();
+	object->delay();
 
 	//set mode write to display
 	//HAL_GPIO_WritePin(DISPLAY_READ_WRITE_GPIO_Port, DISPLAY_READ_WRITE_Pin, 0);
-	_readWrite(false);
+	object->readWrite(false);
 
 	//asm volatile ("nop");
 
 	//for(i=0 ; i< 100;i++){}
 	//HAL_Delay(_delay_ms);
-	_delay();
+	object->delay();
 
 	//GPIOB->ODR &= 0xF403;
 	//GPIOB->ODR |= (data & 0x07) | ((data & 0x08) << 10) | ((data & 0xF0) << 12);
-	_writePort(data);
+	object->writePort(data);
 
 	//for(i=0 ; i< 100;i++){}
 	//HAL_Delay(_delay_ms);
-	_delay();
+	object->delay();
 
 	//clear enable pin
 	//HAL_GPIO_WritePin(DISPLAY_ENABLE_GPIO_Port, DISPLAY_ENABLE_Pin, 0);
-	_enable(false);
+	object->enable(false);
 
 	//for(i=0 ; i< 50;i++){}
 	//HAL_Delay(1);
-	_delay();
-#if 0
-	//while(read_busy_pin() & PIN_BUSY);
-	uint8_t i=0;
-
-	SETBIT(PORTB,PINB0);		//set enable pin
-
-	for(i=0 ; i< 50;i++){}
-
-	CLRBIT(PORTB,PINB1); //set mode write to display
-
-	//asm volatile ("nop");
-
-	for(i=0 ; i< 100;i++){}
-
-	PORTD = c;
-
-	for(i=0 ; i< 100;i++){}
-
-	CLRBIT(PORTB,PINB0);	//clear enable pin
-
-	for(i=0 ; i< 50;i++){}
-#endif
+	object->delay();
 }
 
-void _writeToDisplay()
+void _writeToDisplay(display_t *object)
 {
-	switch(_displayStateMachineMode){
+	switch(object->state){
 		case setCursorToTop:
 			//cursor set to the first position in row 0 (first position of the first display array)
-			_writeCommandToDisplay(0x00|DD_RAM_ADDR_SET);
+			_writeCommandToDisplay(object, 0x00|DD_RAM_ADDR_SET);
 
 			//switch mode
-			_displayStateMachineMode = firstLines;
+			object->state = firstLines;
 
 			//reset display_cursor_index
-			_displayCursorIndex = 0;
+			object->cursorIndex = 0;
 			break;
 
 		case firstLines:
 			//write first display array
-			_writeCharToDisplay(_displayOutputArray[_displayCursorIndex]);
-			if (_displayCursorIndex == 32){
+			_writeCharToDisplay(object, object->outputArray[object->cursorIndex]);
+			if (object->cursorIndex == 32){
 				 //switch mode when cursor has reached the end of the first display array
-				_displayStateMachineMode = setCursorToMiddle;
+				object->state = setCursorToMiddle;
 			}else{
-				_displayCursorIndex++;
+				object->cursorIndex++;
 			}
 			break;
 
 		case setCursorToMiddle:
 			//cursor set to the first position in row 1 (first position of the second display array)
-			_writeCommandToDisplay(0x40|DD_RAM_ADDR_SET);
+			_writeCommandToDisplay(object, 0x40|DD_RAM_ADDR_SET);
 
 			//switch mode
-			_displayStateMachineMode = secondLines;
+			object->state = secondLines;
 			break;
 
 		case secondLines:
 			//write second display array
-			_writeCharToDisplay(_displayOutputArray[_displayCursorIndex]);
-			if (_displayCursorIndex == 63){
-				_displayCursorIndex = 0;
+			_writeCharToDisplay(object, object->outputArray[object->cursorIndex]);
+			if (object->cursorIndex == 63){
+				object->cursorIndex = 0;
 
 				 //switch mode when cursor has reached the end of the second display array
-				_displayStateMachineMode = setCursorToTop;
-				_requestHandled();
+				object->state = setCursorToTop;
+				_requestHandled(object);
 			}else{
-				_displayCursorIndex++;
+				object->cursorIndex++;
 			}
 			break;
 
 		default:
 			//switch mode
-			_displayStateMachineMode = setCursorToTop;
+			object->state = setCursorToTop;
 			break;
 	}
 }
 
-void _updateDisplayArray()
+void _updateDisplayArray(display_t *object)
 {
 	uint8_t i  = 0;
 
 	for(i = 0; i<16; i++) {
-		_displayOutputArray[i] = _displayOutputArrayMirror[i];
+		object->outputArray[i] = object->outputArrayMirror[i];
 	}
 	for(i = 0; i<16; i++) {
-		_displayOutputArray[i+32] = _displayOutputArrayMirror[i+16];
+		object->outputArray[i+32] = object->outputArrayMirror[i+16];
 	}
 	for(i = 0; i<16; i++) {
-		_displayOutputArray[i+16] = _displayOutputArrayMirror[i+32];
+		object->outputArray[i+16] = object->outputArrayMirror[i+32];
 	}
 	for(i = 0; i<16; i++) {
-		_displayOutputArray[i+48] = _displayOutputArrayMirror[i+48];
+		object->outputArray[i+48] = object->outputArrayMirror[i+48];
 	}
 }
 

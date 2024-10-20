@@ -13,6 +13,8 @@
 
 pcf8575_t ioexpander;
 
+display_t display;
+
 // interface functions pcf8575
 void _i2cWrite(uint8_t address, uint8_t* data,uint8_t len);
 void _i2cRead(uint8_t address, uint8_t* data,uint8_t len);
@@ -53,6 +55,7 @@ void init_hardware()
 	// third level
 
 	display_init(
+			&display,
 			_disp_delay,
 			_disp_writePort,
 			_disp_readWrite,
@@ -60,9 +63,9 @@ void init_hardware()
 			_disp_regSelect);
 
 
-	display_print(clear, sizeof(clear), 0, 0);
-	display_request(SET_CURSOR_POSITION, 0, 0);
-	while(display_updateRoutine());
+	display_print(&display, clear, sizeof(clear), 0, 0);
+	display_request(&display, SET_CURSOR_POSITION, 0, 0);
+	while(display_updateRoutine(&display));
 
 
 
@@ -111,8 +114,8 @@ void init_hardware()
 		}
 		rowIndex &= 0x03;
 		if(rowIndex != rowIndex_old){
-			display_request(SET_CURSOR_POSITION, rowIndex, 0);
-			while(display_updateRoutine());
+			display_request(&display, SET_CURSOR_POSITION, rowIndex, 0);
+			while(display_updateRoutine(&display));
 			rowIndex_old = rowIndex;
 		}
 		pcf8575_togglePin(&ioexpander, PCF8575_IOPORT_0, 7);

@@ -55,11 +55,27 @@ enum cursor_modes_e
 	AUTO_INCREMENT
 };
 
+typedef enum{
+	setCursorToTop,
+	firstLines,
+	setCursorToMiddle,
+	secondLines
+}displayStateMachine_modes_t;
+
 typedef struct{
 	display_delay delay;
 	display_writePort writePort;
 	display_readWrite readWrite;
 	display_enable enable;
+	display_regSelect regSelect;
+	char  outputArrayMirror[64];
+	char outputArray[64];
+	volatile uint8_t cursorRow;
+	volatile uint8_t cursorIndex;
+	displayStateMachine_modes_t state;
+	uint8_t requestPipeline[3][32];
+	uint8_t writeIndex;
+	uint8_t workIndex;
 }display_t;
 
 /**
@@ -68,6 +84,7 @@ typedef struct{
  *
  */
 void display_init(
+		display_t *object,
 		display_delay delay,
 		display_writePort writePort,
 		display_readWrite readWrite,
@@ -82,14 +99,16 @@ void display_init(
  * All the requests placed by @ref display_request and @ref display_print are handeled
  * here asynchronously from the time of request. This function should not
  */
-bool display_updateRoutine();
+bool display_updateRoutine(display_t *object);
 
 void display_request(
+		display_t *object,
 		display_cmd_t cmd,
 		uint8_t var1,
 		uint8_t var2);
 
 void display_print(
+		display_t *object,
 		char* text,
 		uint8_t len,
 		uint8_t row,
