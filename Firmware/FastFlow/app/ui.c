@@ -18,7 +18,7 @@ uint8_t columnIndex = 0;
 bool blinkState = false;
 
 char clear[] = "                                                                ";
-char menu[] = " r_s     T_r     T_s     r_c     t_s     -       r_r     start  ";
+char menu[] = " r_s     T_r     T_s     r_c     t_s     T_f     r_r     start  ";
 
 // state declaration
 void _state_listMenu();
