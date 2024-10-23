@@ -1,0 +1,8 @@
+../app/tinyfsm.c:15:21:_singleThreadedLock	1
+../app/tinyfsm.c:20:21:_singleThreadedUnlock	1
+../app/tinyfsm.c:24:6:fsmInit	1
+../app/tinyfsm.c:45:6:fsmInitSingleThreaded	1
+../app/tinyfsm.c:69:13:fsmRun	8
+../app/tinyfsm.c:121:6:fsmTransitionState	3
+../app/tinyfsm.c:140:6:fsmEndFSM	3
+../app/tinyfsm.c:154:6:fsmNoAction	1

@@ -5,13 +5,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../app/fastFlow.c 
+../app/fastFlow.c \
+../app/tinyfsm.c \
+../app/ui.c 
 
 OBJS += \
-./app/fastFlow.o 
+./app/fastFlow.o \
+./app/tinyfsm.o \
+./app/ui.o 
 
 C_DEPS += \
-./app/fastFlow.d 
+./app/fastFlow.d \
+./app/tinyfsm.d \
+./app/ui.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -21,7 +27,7 @@ app/%.o app/%.su app/%.cyclo: ../app/%.c app/subdir.mk
 clean: clean-app
 
 clean-app:
-	-$(RM) ./app/fastFlow.cyclo ./app/fastFlow.d ./app/fastFlow.o ./app/fastFlow.su
+	-$(RM) ./app/fastFlow.cyclo ./app/fastFlow.d ./app/fastFlow.o ./app/fastFlow.su ./app/tinyfsm.cyclo ./app/tinyfsm.d ./app/tinyfsm.o ./app/tinyfsm.su ./app/ui.cyclo ./app/ui.d ./app/ui.o ./app/ui.su
 
 .PHONY: clean-app
 

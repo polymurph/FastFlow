@@ -1,0 +1,7 @@
+../app/ui.c:32:6:ui_init	2
+../app/ui.c:49:6:ui_updateRoutine	1
+../app/ui.c:54:6:ui_handleEvent	1
+../app/ui.c:61:6:_state_listMenu	8
+../app/ui.c:95:6:_action_initSelectArrow	1
+../app/ui.c:102:6:_action_moveSelectArrowUp	2
+../app/ui.c:116:6:_action_moveSelectArrowDown	2

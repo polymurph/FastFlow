@@ -10,13 +10,14 @@
 #include "buzzer.h"
 #include "encoder.h"
 #include "display.h"
+#include  "ui.h"
 
 pcf8575_t ioexpander;
 
 display_t display;
 
-const uint32_t c_displayRefreshRateNTick = 50;
-const uint32_t c_encoderRefreshRateNTick = 180;
+const uint32_t c_displayRefreshRateNTick = 1;
+const uint32_t c_encoderRefreshRateNTick = 200;
 const uint32_t c_LEDRefreshRateNTick = 250;
 
 
@@ -35,7 +36,6 @@ void _disp_regSelect(bool state);
 
 void init_hardware()
 {
-	uint8_t i = 0;
 	uint8_t rowIndex = 0;
 	uint8_t rowIndex_old = 0;
 
@@ -44,8 +44,7 @@ void init_hardware()
 	uint32_t encoderLastTick = tickNow;
 	uint32_t LEDLastTick = tickNow;
 
-	char clear[] = "                                                                ";
-	char text[] = "         haha";
+	//char clear[] = "                                                                ";
 
 	uint8_t turnedRight_msg[] = "Turned Right!\n\r";
 	uint8_t turnedLeft_msg[] = "Turned Left!\n\r";
@@ -53,14 +52,9 @@ void init_hardware()
 	// seccond level
 	pcf8575_init(&ioexpander, 0x20, _i2cRead, _i2cWrite, 0x00, 0x00);
 
-	encoder_init();
+	//encoder_init();
+
 	buzzer_init();
-
-	// regSel 0
-	// readwrie 1
-	// en 2
-
-
 
 
 	// third level
@@ -73,12 +67,7 @@ void init_hardware()
 			_disp_enable,
 			_disp_regSelect);
 
-
-	display_print(&display, clear, sizeof(clear), 0, 0);
-	display_request(&display, SET_CURSOR_POSITION, 0, 0);
-
-
-	while(display_updateRoutine(&display));
+	ui_init(&display);
 
 
 	while(1){
@@ -87,25 +76,7 @@ void init_hardware()
 
 		if(tickNow - encoderLastTick > c_encoderRefreshRateNTick){
 			encoderLastTick = tickNow;
-			switch(encoder_read()){
-				case MOVED_CLOCKWISE:
-					HAL_UART_Transmit(&huart2, turnedLeft_msg, sizeof(turnedLeft_msg) - 1, 1000);
-					rowIndex--;
-					break;
-
-				case MOVED_COUNTERCLOCKWISE:
-					HAL_UART_Transmit(&huart2, turnedRight_msg, sizeof(turnedRight_msg) - 1, 1000);
-					rowIndex++;
-					break;
-				default:
-					break;
-			}
-			rowIndex &= 0x03;
-			if(rowIndex != rowIndex_old){
-				display_request(&display, SET_CURSOR_POSITION, rowIndex, 0);
-				//while(display_updateRoutine(&display));
-				rowIndex_old = rowIndex;
-			}
+			ui_updateRoutine();
 		}
 
 		if(tickNow - LEDLastTick > c_LEDRefreshRateNTick){

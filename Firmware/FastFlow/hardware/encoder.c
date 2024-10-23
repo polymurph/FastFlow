@@ -14,24 +14,31 @@ void encoder_init()
 
 bool encoder_readPushButton()
 {
+	/*
 	static uint32_t lastTick = 0;
 	static bool lastButtonState = false;
 	uint32_t currentTick;
 	bool currentButtonState = HAL_GPIO_ReadPin(ENCODER_BUTTON_GPIO_Port, ENCODER_BUTTON_Pin);
 
 	if(currentButtonState && currentButtonState != lastButtonState){
+
 		currentTick = HAL_GetTick();
+
 
 		if((currentTick - lastTick) > _c_debounce_tick_delay){
 			lastTick = currentTick;
 			lastButtonState = currentButtonState;
 			return true;
 		}
+
+		return true;
 	}
 
-	lastTick = currentTick;
+	//lastTick = currentTick;
 	lastButtonState = currentButtonState;
 	return false;
+	*/
+	return HAL_GPIO_ReadPin(ENCODER_BUTTON_GPIO_Port, ENCODER_BUTTON_Pin);
 }
 
 encoder_movement_t encoder_read()

@@ -1,6 +1,12 @@
 # FastFlow
 Reflow Oven Controller
 
+## Reflow
+
+[Reflow Process](https://madpcb.com/reflow-soldering/)
+
+![pic](https://madpcb.com/wp-content/uploads/2020/10/Reflow-Soldering-Reflow-Profile.png)
+
 ## Hardware
 
 ### STM32F411 (Nucleo-64)
