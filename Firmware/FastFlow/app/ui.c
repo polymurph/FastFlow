@@ -2,6 +2,8 @@
 
 #include <stdbool.h>
 
+#include "hardware.h"
+
 #include "tinyfsm.h"
 
 #include "encoder.h"
@@ -29,11 +31,11 @@ void _action_moveSelectArrowUp();
 void _action_moveSelectArrowDown();
 
 
-void ui_init(display_t *displaObj)
+void ui_init()
 {
 
-	encoder_init();
-	displayPtr = displaObj;
+	//encoder_init();
+	displayPtr = hw_getDisplayobjectByPtr();
 
 
 	display_print(displayPtr, menu, sizeof(menu), 0, 0);
@@ -54,6 +56,16 @@ void ui_updateRoutine()
 void ui_handleEvent(ui_event_t event)
 {
 	eventBuffer = event;
+}
+
+void ui_displayUpdateRoutine()
+{
+	display_updateRoutine(displayPtr);
+}
+
+void ui_toggleLED()
+{
+	hw_toggleLED();
 }
 
 // stat implementation

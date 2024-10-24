@@ -4,17 +4,17 @@
 
 #include "i2c.h"
 #include "usart.h"
+#include "tim.h"
 
 #include "pcf8575.h"
 
 #include "buzzer.h"
 #include "encoder.h"
-#include "display.h"
-#include  "ui.h"
+#include "ui.h"
 
-pcf8575_t ioexpander;
+static pcf8575_t ioexpander;
 
-display_t display;
+static display_t display;
 
 const uint32_t c_displayRefreshRateNTick = 1;
 const uint32_t c_encoderRefreshRateNTick = 200;
@@ -34,7 +34,7 @@ void _disp_readWrite(bool state);
 void _disp_regSelect(bool state);
 
 
-void init_hardware()
+void hw_init()
 {
 	uint8_t rowIndex = 0;
 	uint8_t rowIndex_old = 0;
@@ -49,10 +49,12 @@ void init_hardware()
 	uint8_t turnedRight_msg[] = "Turned Right!\n\r";
 	uint8_t turnedLeft_msg[] = "Turned Left!\n\r";
 
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+
 	// seccond level
 	pcf8575_init(&ioexpander, 0x20, _i2cRead, _i2cWrite, 0x00, 0x00);
 
-	//encoder_init();
+	encoder_init();
 
 	buzzer_init();
 
@@ -67,9 +69,9 @@ void init_hardware()
 			_disp_enable,
 			_disp_regSelect);
 
-	ui_init(&display);
+	//ui_init(&display);
 
-
+	/*
 	while(1){
 		tickNow = HAL_GetTick();
 
@@ -90,6 +92,23 @@ void init_hardware()
 			display_updateRoutine(&display);
 		}
 	}
+	*/
+}
+
+
+display_t* hw_getDisplayobjectByPtr()
+{
+	return &display;
+}
+
+uint32_t hw_getTick()
+{
+	return HAL_GetTick();
+}
+
+void hw_toggleLED()
+{
+	pcf8575_togglePin(&ioexpander, PCF8575_IOPORT_0, 7);
 }
 
 // interface functions pcf8575

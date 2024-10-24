@@ -11,11 +11,14 @@ typedef enum{
 	UI_EV_ENCODER_BUTTON_PUSHED
 }ui_event_t;
 
-void ui_init(display_t *displaObj);
+void ui_init();
 
 void ui_updateRoutine();
 
 void ui_handleEvent(ui_event_t event);
 
+void ui_displayUpdateRoutine();
+
+void ui_toggleLED();
 
 #endif // _UI_H_

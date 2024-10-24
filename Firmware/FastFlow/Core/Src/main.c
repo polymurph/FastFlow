@@ -99,7 +99,7 @@ int main(void)
   MX_TIM2_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-
+  fastFlow_init();
   fastFlow_run();
 
   /* USER CODE END 2 */
