@@ -24,11 +24,25 @@ char menu[] = " r_s     T_r     T_s     r_c     t_s     T_f     r_r     start  "
 
 // state declaration
 void _state_listMenu();
+void _state_set_r_s();
+void _state_set_T_s();
+void _state_set_t_s();
+void _state_set_r_r();
+void _state_set_T_r();
+void _state_set_r_c();
+void _state_set_T_f();
+
 
 // action declaration
 void _action_initSelectArrow();
 void _action_moveSelectArrowUp();
 void _action_moveSelectArrowDown();
+void _action_turnOnCursorBlink();
+void _action_turnOffCursorBlink();
+
+// local fucntions
+bool _buttonPressed();
+
 
 
 void ui_init()
@@ -72,6 +86,7 @@ void ui_toggleLED()
 
 void _state_listMenu()
 {
+	/*
 	static bool buttonOldState = false;
 	bool buttonState = encoder_readPushButton();
 
@@ -84,7 +99,28 @@ void _state_listMenu()
 			blinkState = true;
 		}
 	}
+
 	buttonOldState = buttonState;
+	*/
+
+	if(_buttonPressed()){
+		switch(columnIndex | rowindex){
+
+			case 0x01:
+				fsmTransitionState(&ui_fsm, _state_set_r_s, _action_turnOnCursorBlink);
+				return;
+
+			case 0x02:
+				break;
+
+			case 0x03:
+				break;
+
+			default:
+				break;
+		}
+	}
+
 
 	switch(encoder_read()){
 		case NO_MOVEMENT:
@@ -98,9 +134,48 @@ void _state_listMenu()
 			_action_moveSelectArrowUp();
 			break;
 
+
 		default:
 			break;
 	}
+}
+
+void _state_set_r_s()
+{
+	if(_buttonPressed()){
+		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
+		return;
+	}
+}
+
+void _state_set_T_s()
+{
+
+}
+
+void _state_set_t_s()
+{
+
+}
+
+void _state_set_r_r()
+{
+
+}
+
+void _state_set_T_r()
+{
+
+}
+
+void _state_set_r_c()
+{
+
+}
+
+void _state_set_T_f()
+{
+
 }
 
 // action implementation
@@ -137,6 +212,32 @@ void _action_moveSelectArrowDown()
 	}
 	display_print(displayPtr, ">", 1, rowindex & 0x03, columnIndex);
 	display_request(displayPtr, SET_CURSOR_POSITION, rowindex & 0x03, columnIndex);
+}
+
+
+void _action_turnOnCursorBlink()
+{
+	display_request(displayPtr, SET_CURSOR_MODE, VISIBLE_BLINK, 0);
+}
+
+void _action_turnOffCursorBlink()
+{
+	display_request(displayPtr, SET_CURSOR_MODE, INVISIBLE, 0);
+}
+
+
+// local functions implementeation
+
+bool _buttonPressed()
+{
+	static bool buttonOldState = false;
+	bool buttonState = encoder_readPushButton();
+
+	if(buttonState && (buttonState != buttonOldState)){
+		return true;
+	}
+	buttonOldState = buttonState;
+	return false;
 }
 
 
