@@ -45,6 +45,7 @@ void _action_turnOffCursorBlink();
 // local fucntions
 bool _buttonPressed();
 void _displayPrintNumber(display_t *displayObject, uint8_t number, uint8_t row, uint8_t column);
+void _encoderUpdateparameter(display_t *displayObject, uint8_t *param, uint8_t row, uint8_t column);
 
 void ui_init()
 {
@@ -165,37 +166,24 @@ void _state_listMenu()
 
 void _state_set_r_s()
 {
-	static bool lock = 0;
 	static uint8_t numb = 111;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
 	}
 
-	switch(encoder_read()){
-		case NO_MOVEMENT:
-			return;
+	_encoderUpdateparameter(displayPtr, &numb, 0, 5);
 
-		case MOVED_CLOCKWISE:
-			_displayPrintNumber(displayPtr, numb++, 0, 5);
-			break;
-
-		case MOVED_COUNTERCLOCKWISE:
-			_displayPrintNumber(displayPtr, numb--, 0, 5);
-			break;
-
-
-		default:
-			break;
-	}
 }
 
 void _state_set_T_s()
 {
+	static uint8_t numb = 111;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
 	}
+	_encoderUpdateparameter(displayPtr, &numb, 1, 5);
 }
 
 void _state_set_t_s()
@@ -327,9 +315,28 @@ void _displayPrintNumber(display_t *displayObject, uint8_t number, uint8_t row, 
 		buf[number] |= 0x30;
 	}
 
-
-
 	display_print(displayObject, buf, 3, row, column);
+}
+
+void _encoderUpdateparameter(display_t *displayObject, uint8_t *param, uint8_t row, uint8_t column)
+{
+	switch(encoder_read()){
+		case NO_MOVEMENT:
+			return;
+
+		case MOVED_CLOCKWISE:
+			*param += 1;
+			_displayPrintNumber(displayObject, *param, row, column);
+			break;
+
+		case MOVED_COUNTERCLOCKWISE:
+			*param -= 1;
+			_displayPrintNumber(displayObject, *param, row, column);
+			break;
+
+		default:
+			break;
+	}
 }
 
 
