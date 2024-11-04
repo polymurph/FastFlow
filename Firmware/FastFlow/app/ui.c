@@ -8,13 +8,15 @@
 
 #include "encoder.h"
 
+#include "usart.h"
+
 ui_event_t eventBuffer;
 
 fsm_t ui_fsm;
 
 display_t *displayPtr;
 
-uint8_t rowindex = 0;
+uint8_t rowIndex = 0;
 uint8_t columnIndex = 0;
 
 bool blinkState = false;
@@ -42,8 +44,7 @@ void _action_turnOffCursorBlink();
 
 // local fucntions
 bool _buttonPressed();
-
-
+void _displayPrintNumber(display_t *displayObject, uint8_t number, uint8_t row, uint8_t column);
 
 void ui_init()
 {
@@ -104,16 +105,38 @@ void _state_listMenu()
 	*/
 
 	if(_buttonPressed()){
-		switch(columnIndex | rowindex){
+		switch(rowIndex){
 
-			case 0x01:
+			case 0x00:
 				fsmTransitionState(&ui_fsm, _state_set_r_s, _action_turnOnCursorBlink);
 				return;
 
+			case 0x01:
+				fsmTransitionState(&ui_fsm, _state_set_T_s, _action_turnOnCursorBlink);
+				return;
+
 			case 0x02:
-				break;
+				fsmTransitionState(&ui_fsm, _state_set_t_s, _action_turnOnCursorBlink);
+				return;
 
 			case 0x03:
+				fsmTransitionState(&ui_fsm, _state_set_r_r, _action_turnOnCursorBlink);
+				return;
+
+			case 0x04:
+				fsmTransitionState(&ui_fsm, _state_set_T_r, _action_turnOnCursorBlink);
+				return;
+
+			case 0x05:
+				fsmTransitionState(&ui_fsm, _state_set_r_c, _action_turnOnCursorBlink);
+				return;
+
+			case 0x06:
+				fsmTransitionState(&ui_fsm, _state_set_T_f, _action_turnOnCursorBlink);
+				return;
+
+			case 0x07:
+				//fsmTransitionState(&ui_fsm, _state_set_t_s, _action_turnOnCursorBlink);
 				break;
 
 			default:
@@ -142,76 +165,123 @@ void _state_listMenu()
 
 void _state_set_r_s()
 {
+	static bool lock = 0;
+	static uint8_t numb = 111;
+	if(_buttonPressed()){
+		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
+		return;
+	}
+
+	switch(encoder_read()){
+		case NO_MOVEMENT:
+			return;
+
+		case MOVED_CLOCKWISE:
+			_displayPrintNumber(displayPtr, numb++, 0, 5);
+			break;
+
+		case MOVED_COUNTERCLOCKWISE:
+			_displayPrintNumber(displayPtr, numb--, 0, 5);
+			break;
+
+
+		default:
+			break;
+	}
+}
+
+void _state_set_T_s()
+{
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
 	}
 }
 
-void _state_set_T_s()
-{
-
-}
-
 void _state_set_t_s()
 {
-
+	if(_buttonPressed()){
+		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
+		return;
+	}
 }
 
 void _state_set_r_r()
 {
-
+	if(_buttonPressed()){
+		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
+		return;
+	}
 }
 
 void _state_set_T_r()
 {
-
+	if(_buttonPressed()){
+		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
+		return;
+	}
 }
 
 void _state_set_r_c()
 {
-
+	if(_buttonPressed()){
+		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
+		return;
+	}
 }
 
 void _state_set_T_f()
 {
-
+	if(_buttonPressed()){
+		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
+		return;
+	}
 }
 
 // action implementation
 void _action_initSelectArrow()
 {
 	display_request(displayPtr, SET_CURSOR_MODE, INVISIBLE, 0);
-	display_print(displayPtr, ">", 1, rowindex, 0);
-	display_request(displayPtr, SET_CURSOR_POSITION, rowindex, 0);
+	display_print(displayPtr, ">", 1, rowIndex, 0);
+	display_request(displayPtr, SET_CURSOR_POSITION, rowIndex, 0);
 }
 
 void _action_moveSelectArrowUp()
 {
-	display_print(displayPtr, " ", 1, rowindex & 0x03, columnIndex);
-	rowindex--;
-	rowindex &= 0x07;
-	if(rowindex >0x03) {
+	uint8_t data[3] = {0,'\n','\r'};
+	display_print(displayPtr, " ", 1, rowIndex & 0x03, columnIndex);
+	rowIndex--;
+	rowIndex &= 0x07;
+	if(rowIndex >0x03) {
 		columnIndex = 8;
 	} else {
 		columnIndex = 0;
 	}
-	display_print(displayPtr, ">", 1, rowindex & 0x03, columnIndex);
-	display_request(displayPtr, SET_CURSOR_POSITION, rowindex, columnIndex);
+	data[0] = rowIndex & 0x03 | 0x30;
+	HAL_UART_Transmit(&huart2, &data, 3, 1000);
+	data[0] = columnIndex >>3 | 0x30;
+	HAL_UART_Transmit(&huart2, &data, 3, 1000);
+	display_print(displayPtr, ">", 1, rowIndex & 0x03, columnIndex);
+	display_request(displayPtr, SET_CURSOR_POSITION, rowIndex, columnIndex);
 }
 
 void _action_moveSelectArrowDown()
 {
-	display_print(displayPtr, " ", 1, rowindex & 0x03, columnIndex);
-	rowindex++;
-	rowindex &= 0x07;
-	if(rowindex >0x03) {
+	uint8_t data[3] = {0,'\n','\r'};
+	display_print(displayPtr, " ", 1, rowIndex & 0x03, columnIndex);
+	rowIndex++;
+	rowIndex &= 0x07;
+	if(rowIndex >0x03) {
 		columnIndex = 8;
 	} else {
 		columnIndex = 0;
 	}
-	display_print(displayPtr, ">", 1, rowindex & 0x03, columnIndex);
-	display_request(displayPtr, SET_CURSOR_POSITION, rowindex & 0x03, columnIndex);
+	data[0] = rowIndex & 0x03 | 0x30;
+	HAL_UART_Transmit(&huart2, &data, 3, 1000);
+	data[0] = columnIndex >>3 | 0x30;
+	HAL_UART_Transmit(&huart2, &data, 3, 1000);
+	display_print(displayPtr, ">", 1, rowIndex & 0x03, columnIndex);
+	display_request(displayPtr, SET_CURSOR_POSITION, rowIndex & 0x03, columnIndex);
 }
 
 
@@ -234,10 +304,32 @@ bool _buttonPressed()
 	bool buttonState = encoder_readPushButton();
 
 	if(buttonState && (buttonState != buttonOldState)){
+		buttonOldState = buttonState;
 		return true;
 	}
+
 	buttonOldState = buttonState;
 	return false;
+}
+
+void _displayPrintNumber(display_t *displayObject, uint8_t number, uint8_t row, uint8_t column)
+{
+
+	uint8_t buf[3];
+
+	buf[0] = number / 100;
+	number -= 100 * buf[0];
+	buf[1] = number / 10;
+	number -= 10 * buf[1];
+	buf[2] = number;
+
+	for(number = 0; number < 3; number++){
+		buf[number] |= 0x30;
+	}
+
+
+
+	display_print(displayObject, buf, 3, row, column);
 }
 
 
