@@ -188,42 +188,52 @@ void _state_set_T_s()
 
 void _state_set_t_s()
 {
+	static uint8_t numb = 111;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
 	}
+	_encoderUpdateparameter(displayPtr, &numb, 2, 5);
 }
 
 void _state_set_r_r()
 {
+	static uint8_t numb = 111;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
 	}
+	_encoderUpdateparameter(displayPtr, &numb, 3, 5);
 }
 
 void _state_set_T_r()
 {
+	static uint8_t numb = 111;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
 	}
+	_encoderUpdateparameter(displayPtr, &numb, 0, 13);
 }
 
 void _state_set_r_c()
 {
+	static uint8_t numb = 111;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
 	}
+	_encoderUpdateparameter(displayPtr, &numb, 1, 13);
 }
 
 void _state_set_T_f()
 {
+	static uint8_t numb = 111;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
 	}
+	_encoderUpdateparameter(displayPtr, &numb, 2, 13);
 }
 
 // action implementation
@@ -316,6 +326,8 @@ void _displayPrintNumber(display_t *displayObject, uint8_t number, uint8_t row, 
 	}
 
 	display_print(displayObject, buf, 3, row, column);
+	// put back curset at original position where the index is
+	display_request(displayObject, SET_CURSOR_POSITION, rowIndex & 0x03, columnIndex);
 }
 
 void _encoderUpdateparameter(display_t *displayObject, uint8_t *param, uint8_t row, uint8_t column)
