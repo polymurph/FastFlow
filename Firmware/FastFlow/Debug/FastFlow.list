@@ -12299,8 +12299,8 @@ void _state_menu()
  8004a68:	b580      	push	{r7, lr}
  8004a6a:	b084      	sub	sp, #16
  8004a6c:	af00      	add	r7, sp, #0
-	const uint32_t c_uiRefreshRateNtick = 100;
- 8004a6e:	2364      	movs	r3, #100	@ 0x64
+	const uint32_t c_uiRefreshRateNtick = 150;
+ 8004a6e:	2396      	movs	r3, #150	@ 0x96
  8004a70:	60fb      	str	r3, [r7, #12]
 	const uint32_t c_LEDRefreshRateNtick = 500;
  8004a72:	f44f 73fa 	mov.w	r3, #500	@ 0x1f4

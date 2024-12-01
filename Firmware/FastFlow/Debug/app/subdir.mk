@@ -6,16 +6,22 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../app/fastFlow.c \
+../app/heater.c \
+../app/pid.c \
 ../app/tinyfsm.c \
 ../app/ui.c 
 
 OBJS += \
 ./app/fastFlow.o \
+./app/heater.o \
+./app/pid.o \
 ./app/tinyfsm.o \
 ./app/ui.o 
 
 C_DEPS += \
 ./app/fastFlow.d \
+./app/heater.d \
+./app/pid.d \
 ./app/tinyfsm.d \
 ./app/ui.d 
 
@@ -27,7 +33,7 @@ app/%.o app/%.su app/%.cyclo: ../app/%.c app/subdir.mk
 clean: clean-app
 
 clean-app:
-	-$(RM) ./app/fastFlow.cyclo ./app/fastFlow.d ./app/fastFlow.o ./app/fastFlow.su ./app/tinyfsm.cyclo ./app/tinyfsm.d ./app/tinyfsm.o ./app/tinyfsm.su ./app/ui.cyclo ./app/ui.d ./app/ui.o ./app/ui.su
+	-$(RM) ./app/fastFlow.cyclo ./app/fastFlow.d ./app/fastFlow.o ./app/fastFlow.su ./app/heater.cyclo ./app/heater.d ./app/heater.o ./app/heater.su ./app/pid.cyclo ./app/pid.d ./app/pid.o ./app/pid.su ./app/tinyfsm.cyclo ./app/tinyfsm.d ./app/tinyfsm.o ./app/tinyfsm.su ./app/ui.cyclo ./app/ui.d ./app/ui.o ./app/ui.su
 
 .PHONY: clean-app
 

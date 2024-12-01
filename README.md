@@ -1,6 +1,10 @@
 # FastFlow
 Reflow Oven Controller
 
+## Temperature Controller
+
+[PID Tuning via Classical Methods](https://eng.libretexts.org/Bookshelves/Industrial_and_Systems_Engineering/Chemical_Process_Dynamics_and_Controls_(Woolf)/09%3A_Proportional-Integral-Derivative_(PID)_Control/9.03%3A_PID_Tuning_via_Classical_Methods)
+
 ## Reflow
 
 [Reflow Process](https://madpcb.com/reflow-soldering/)

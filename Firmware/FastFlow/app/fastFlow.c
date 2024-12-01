@@ -69,7 +69,7 @@ void fastFlow_run()
 
 void _state_menu()
 {
-	const uint32_t c_uiRefreshRateNtick = 100;
+	const uint32_t c_uiRefreshRateNtick = 150;
 	const uint32_t c_LEDRefreshRateNtick = 500;
 	const uint32_t c_displayRefreshRateNtick = 1;
 
