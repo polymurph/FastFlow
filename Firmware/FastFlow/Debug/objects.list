@@ -38,5 +38,6 @@
 "./hardware/display.o"
 "./hardware/encoder.o"
 "./hardware/hardware.o"
+"./hardware/max31865.o"
 "./hardware/oven.o"
 "./hardware/pcf8575.o"

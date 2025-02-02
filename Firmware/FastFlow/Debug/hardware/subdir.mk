@@ -9,6 +9,7 @@ C_SRCS += \
 ../hardware/display.c \
 ../hardware/encoder.c \
 ../hardware/hardware.c \
+../hardware/max31865.c \
 ../hardware/oven.c \
 ../hardware/pcf8575.c 
 
@@ -17,6 +18,7 @@ OBJS += \
 ./hardware/display.o \
 ./hardware/encoder.o \
 ./hardware/hardware.o \
+./hardware/max31865.o \
 ./hardware/oven.o \
 ./hardware/pcf8575.o 
 
@@ -25,6 +27,7 @@ C_DEPS += \
 ./hardware/display.d \
 ./hardware/encoder.d \
 ./hardware/hardware.d \
+./hardware/max31865.d \
 ./hardware/oven.d \
 ./hardware/pcf8575.d 
 
@@ -36,7 +39,7 @@ hardware/%.o hardware/%.su hardware/%.cyclo: ../hardware/%.c hardware/subdir.mk
 clean: clean-hardware
 
 clean-hardware:
-	-$(RM) ./hardware/buzzer.cyclo ./hardware/buzzer.d ./hardware/buzzer.o ./hardware/buzzer.su ./hardware/display.cyclo ./hardware/display.d ./hardware/display.o ./hardware/display.su ./hardware/encoder.cyclo ./hardware/encoder.d ./hardware/encoder.o ./hardware/encoder.su ./hardware/hardware.cyclo ./hardware/hardware.d ./hardware/hardware.o ./hardware/hardware.su ./hardware/oven.cyclo ./hardware/oven.d ./hardware/oven.o ./hardware/oven.su ./hardware/pcf8575.cyclo ./hardware/pcf8575.d ./hardware/pcf8575.o ./hardware/pcf8575.su
+	-$(RM) ./hardware/buzzer.cyclo ./hardware/buzzer.d ./hardware/buzzer.o ./hardware/buzzer.su ./hardware/display.cyclo ./hardware/display.d ./hardware/display.o ./hardware/display.su ./hardware/encoder.cyclo ./hardware/encoder.d ./hardware/encoder.o ./hardware/encoder.su ./hardware/hardware.cyclo ./hardware/hardware.d ./hardware/hardware.o ./hardware/hardware.su ./hardware/max31865.cyclo ./hardware/max31865.d ./hardware/max31865.o ./hardware/max31865.su ./hardware/oven.cyclo ./hardware/oven.d ./hardware/oven.o ./hardware/oven.su ./hardware/pcf8575.cyclo ./hardware/pcf8575.d ./hardware/pcf8575.o ./hardware/pcf8575.su
 
 .PHONY: clean-hardware
 

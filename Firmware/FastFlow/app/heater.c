@@ -2,6 +2,7 @@
 #include "pid.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "max31865.h"
 
 enum{
 	_INIT,
@@ -15,6 +16,7 @@ enum{
 
 static volatile uint16_t _profileTime_s = 0;
 static pid_t pid;
+static max31865_t max31865;
 
 static volatile bool _interruptFlag = false;
 
@@ -37,6 +39,14 @@ void _stopTimerInterrupt();
 void _setPWMdutyCycle(uint32_t dutycycle);
 float _readTemp();
 
+void _chipSelect(bool select);
+uint8_t _spiTRX(uint8_t data);
+void _delayChargeTime();
+void _delayConversionTime();
+void _highTHfault();
+void _lowTHfault();
+
+
 
 // interrupt service routine
 void _heaterControllISR();
@@ -47,6 +57,20 @@ void _heaterControllISR();
 void heaterInit()
 {
 	//pid_init(&pid, T_s, K_P, K_I, K_D, I_max, I_min, 0xFFFFFFFF, 0);
+
+	max31865_init(&max31865,
+			_chipSelect,
+			_spiTRX,
+			_delayChargeTime,
+			_delayConversionTime,
+			_highTHfault,
+			_lowTHfault,
+			100,
+			430,
+			0x0000,
+			0xFFFF,
+			true,
+			true);
 }
 
 void heaterSetupTemperaturProfile()
@@ -169,6 +193,36 @@ void _setPWMdutyCycle(uint32_t dutycycle)
 float _readTemp()
 {
 	return 0;
+}
+
+void _chipSelect(bool select)
+{
+
+}
+
+uint8_t _spiTRX(uint8_t data)
+{
+	return 0;
+}
+
+void _delayChargeTime()
+{
+
+}
+
+void _delayConversionTime()
+{
+
+}
+
+void _highTHfault()
+{
+
+}
+
+void _lowTHfault()
+{
+
 }
 
 void _heaterControllISR()
