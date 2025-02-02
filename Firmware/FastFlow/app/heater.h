@@ -3,7 +3,7 @@
 
 void heaterInit();
 
-void heaterSetup();
+void heaterSetupTemperaturProfile();
 
 void heaterStart();
 

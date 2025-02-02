@@ -10,6 +10,8 @@
 
 #include "usart.h"
 
+#include "heater.h"
+
 ui_event_t eventBuffer;
 
 fsm_t ui_fsm;
@@ -42,7 +44,7 @@ void _action_moveSelectArrowUp();
 void _action_moveSelectArrowDown();
 void _action_turnOnCursorBlink();
 void _action_turnOffCursorBlink();
-void _action_printRampToSoak();
+void _action_initReflowProcess();
 
 // local fucntions
 bool _buttonPressed();
@@ -139,7 +141,7 @@ void _state_listMenu()
 				return;
 
 			case 0x07:
-				fsmTransitionState(&ui_fsm,_state_rampToSoak, _action_printRampToSoak);
+				fsmTransitionState(&ui_fsm,_state_rampToSoak, _action_initReflowProcess);
 				//fsmTransitionState(&ui_fsm, _state_set_t_s, _action_turnOnCursorBlink);
 				break;
 
@@ -241,7 +243,7 @@ void _state_set_T_f()
 
 void _state_rampToSoak()
 {
-
+	// do a test here by just printing out the temperature from the MAX31865
 }
 
 // action implementation
@@ -301,9 +303,10 @@ void _action_turnOffCursorBlink()
 	display_request(displayPtr, SET_CURSOR_MODE, INVISIBLE, 0);
 }
 
-void _action_printRampToSoak()
+void _action_initReflowProcess()
 {
 	display_print(displayPtr, clear, sizeof(clear), 0, 0);
+	heaterSetupTemperaturProfile();
 }
 
 
