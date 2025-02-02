@@ -21,10 +21,13 @@ static volatile bool _interruptFlag = false;
 float _soakTemp = 0;
 uint16_t _soakTime = 0;
 uint16_t _updateperiode = 0;
+uint16_t _profileTime;
+uint16_t _timer;
 float _rampRate;
 float _rampIncrement;
 float _reflowTemp;
 float _cooldownRate;
+float _cooldwonIncrement;
 
 // local functions declaratrion
 void _enableHeaterPWM();
@@ -43,7 +46,7 @@ void _heaterControllISR();
 
 void heaterInit()
 {
-	pid_init(&pid, T_s, K_P, K_I, K_D, I_max, I_min, 0xFFFFFFFF, 0);
+	//pid_init(&pid, T_s, K_P, K_I, K_D, I_max, I_min, 0xFFFFFFFF, 0);
 }
 
 void heaterSetupTemperaturProfile()

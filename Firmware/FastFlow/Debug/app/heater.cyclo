@@ -1,0 +1,12 @@
+../app/heater.c:47:6:heaterInit	1
+../app/heater.c:52:6:heaterSetupTemperaturProfile	1
+../app/heater.c:58:6:heaterStart	1
+../app/heater.c:65:6:heaterStop	1
+../app/heater.c:72:6:heaterRoutine	14
+../app/heater.c:144:6:_enableHeaterPWM	1
+../app/heater.c:149:6:_dissableHeaterPWM	1
+../app/heater.c:154:6:_startTimerInterrupt	1
+../app/heater.c:159:6:_stopTimerInterrupt	1
+../app/heater.c:164:6:_setPWMdutyCycle	1
+../app/heater.c:169:7:_readTemp	1
+../app/heater.c:174:6:_heaterControllISR	1

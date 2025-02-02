@@ -58,7 +58,7 @@ float pid_update(pid_t* pidObjp, float error)
         return pidObjp->out_min;
     }
 
-    return  output
+    return  output;
 }
 
 float _P(pid_t *pidObjp, float error)

@@ -55,7 +55,7 @@ void pid_init(
     float I_min,
     float out_max,
     float out_min
-    )
+    );
 
 /**
  * @brief Resets the PID controller to its initial state.

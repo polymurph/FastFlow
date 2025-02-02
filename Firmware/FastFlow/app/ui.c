@@ -22,7 +22,7 @@ uint8_t columnIndex = 0;
 bool blinkState = false;
 
 char clear[] = "                                                                ";
-char menu[] = " r_s     T_r     T_s     r_c     t_s     T_f     r_r     start  ";
+char menu[] = " r_s   0 T_r   0 T_s   0 r_c   0 t_s   0 T_f   0 r_r   0 start  ";
 
 // state declaration
 void _state_listMenu();
@@ -33,6 +33,7 @@ void _state_set_r_r();
 void _state_set_T_r();
 void _state_set_r_c();
 void _state_set_T_f();
+void _state_rampToSoak();
 
 
 // action declaration
@@ -41,6 +42,7 @@ void _action_moveSelectArrowUp();
 void _action_moveSelectArrowDown();
 void _action_turnOnCursorBlink();
 void _action_turnOffCursorBlink();
+void _action_printRampToSoak();
 
 // local fucntions
 bool _buttonPressed();
@@ -137,6 +139,7 @@ void _state_listMenu()
 				return;
 
 			case 0x07:
+				fsmTransitionState(&ui_fsm,_state_rampToSoak, _action_printRampToSoak);
 				//fsmTransitionState(&ui_fsm, _state_set_t_s, _action_turnOnCursorBlink);
 				break;
 
@@ -166,7 +169,7 @@ void _state_listMenu()
 
 void _state_set_r_s()
 {
-	static uint8_t numb = 111;
+	static uint8_t numb = 0;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
@@ -178,7 +181,7 @@ void _state_set_r_s()
 
 void _state_set_T_s()
 {
-	static uint8_t numb = 111;
+	static uint8_t numb = 0;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
@@ -188,7 +191,7 @@ void _state_set_T_s()
 
 void _state_set_t_s()
 {
-	static uint8_t numb = 111;
+	static uint8_t numb = 0;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
@@ -198,7 +201,7 @@ void _state_set_t_s()
 
 void _state_set_r_r()
 {
-	static uint8_t numb = 111;
+	static uint8_t numb = 0;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
@@ -208,7 +211,7 @@ void _state_set_r_r()
 
 void _state_set_T_r()
 {
-	static uint8_t numb = 111;
+	static uint8_t numb = 0;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
@@ -218,7 +221,7 @@ void _state_set_T_r()
 
 void _state_set_r_c()
 {
-	static uint8_t numb = 111;
+	static uint8_t numb = 0;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
@@ -228,12 +231,17 @@ void _state_set_r_c()
 
 void _state_set_T_f()
 {
-	static uint8_t numb = 111;
+	static uint8_t numb = 0;
 	if(_buttonPressed()){
 		fsmTransitionState(&ui_fsm, _state_listMenu, _action_turnOffCursorBlink);
 		return;
 	}
 	_encoderUpdateparameter(displayPtr, &numb, 2, 13);
+}
+
+void _state_rampToSoak()
+{
+
 }
 
 // action implementation
@@ -293,6 +301,11 @@ void _action_turnOffCursorBlink()
 	display_request(displayPtr, SET_CURSOR_MODE, INVISIBLE, 0);
 }
 
+void _action_printRampToSoak()
+{
+	display_print(displayPtr, clear, sizeof(clear), 0, 0);
+}
+
 
 // local functions implementeation
 
@@ -312,18 +325,30 @@ bool _buttonPressed()
 
 void _displayPrintNumber(display_t *displayObject, uint8_t number, uint8_t row, uint8_t column)
 {
-
 	uint8_t buf[3];
 
-	buf[0] = number / 100;
-	number -= 100 * buf[0];
-	buf[1] = number / 10;
-	number -= 10 * buf[1];
-	buf[2] = number;
-
-	for(number = 0; number < 3; number++){
-		buf[number] |= 0x30;
-	}
+	if(number >=100){
+			buf[0] = number / 100;
+			number -= 100 * buf[0];
+			buf[1] = (number / 10);
+			number -= 10 * buf[1];
+			buf[2] = number;
+			buf[0] |= 0x30;
+			buf[1] |= 0x30;
+			buf[2] |= 0x30;
+		} else if(number >= 10){
+			buf[1] = number / 10;
+			number -= 10 * buf[1];
+			buf[2] = number;
+			buf[0] = ' ';
+			buf[1] |= 0x30;
+			buf[2] |= 0x30;
+		} else {
+			buf[2] = number;
+			buf[0] = ' ';
+			buf[1] = ' ';
+			buf[2] |= 0x30;
+		}
 
 	display_print(displayObject, buf, 3, row, column);
 	// put back curset at original position where the index is

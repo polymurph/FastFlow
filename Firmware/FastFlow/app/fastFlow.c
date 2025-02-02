@@ -90,8 +90,6 @@ void _state_menu()
 		ui_toggleLED();
 	}
 
-
-
 	if(tickNow - displayLastTick > c_displayRefreshRateNtick){
 		displayLastTick = tickNow;
 		ui_displayUpdateRoutine();
