@@ -243,7 +243,16 @@ void _state_set_T_f()
 
 void _state_rampToSoak()
 {
+
+
+	static uint8_t temp;
+	//= heaterGetTemp();
 	// do a test here by just printing out the temperature from the MAX31865
+	temp++;
+	_displayPrintNumber(displayPtr, temp, 0, 4);
+
+
+
 }
 
 // action implementation

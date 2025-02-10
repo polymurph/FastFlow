@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "max31865.h"
+#include "spi.h"
+#include "hardware.h"
 
 enum{
 	_INIT,
@@ -165,6 +167,11 @@ void heaterRoutine()
 	}
 }
 
+uint32_t heaterGetTemp()
+{
+	return (uint32_t)max31865_readCelsius(&max31865);
+}
+
 void _enableHeaterPWM()
 {
 
@@ -197,22 +204,26 @@ float _readTemp()
 
 void _chipSelect(bool select)
 {
-
+	HAL_GPIO_WritePin(SPI3_CS_MAX31865_GPIO_Port, SPI3_CS_MAX31865_Pin, select);
 }
 
 uint8_t _spiTRX(uint8_t data)
 {
+	uint8_t rx;
+	HAL_SPI_TransmitReceive(&hspi3, &data, &rx, 1,0);
 	return 0;
 }
 
 void _delayChargeTime()
 {
-
+	uint32_t tNow = hw_getTick();
+	while(hw_getTick > tNow + 1000);
 }
 
 void _delayConversionTime()
 {
-
+	uint32_t tNow = hw_getTick();
+	while(hw_getTick > tNow + 1000);
 }
 
 void _highTHfault()
