@@ -1,6 +1,4 @@
 #include "fastFlow.h"
-#include "hardware.h"
-
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -8,8 +6,6 @@
 
 #include "usart.h"
 
-#include "encoder.h"
-#include "buzzer.h"
 #include "tim.h"
 #include "i2c.h"
 #include "gpio.h"
@@ -18,6 +14,9 @@
 #include "ui.h"
 
 #include "tinyfsm.h"
+#include "../hal/buzzer.h"
+#include "../hal/encoder.h"
+#include "../hal/hardware.h"
 
 static fsm_t fastFlowFSM;
 
@@ -69,7 +68,9 @@ void fastFlow_run()
 
 void _state_menu()
 {
-	const uint32_t c_uiRefreshRateNtick = 150;
+	//const uint32_t c_uiRefreshRateNtick = 150;
+	const uint32_t c_uiRefreshRateNtick = 500;
+
 	const uint32_t c_LEDRefreshRateNtick = 500;
 	const uint32_t c_displayRefreshRateNtick = 1;
 

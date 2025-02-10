@@ -1,0 +1,2 @@
+../hal/oven.c:6:6:oven_init	1
+../hal/oven.c:11:6:oven_door_is_closed	1

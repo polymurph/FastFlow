@@ -1,2 +1,0 @@
-../hardware/oven.c:5:6:oven_init	1
-../hardware/oven.c:10:6:oven_door_is_closed	1

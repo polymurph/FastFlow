@@ -1,0 +1,3 @@
+../hal/buzzer.c:6:6:buzzer_init	1
+../hal/buzzer.c:11:6:buzzer_turnOn	1
+../hal/buzzer.c:16:6:buzzer_turnOff	1

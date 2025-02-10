@@ -1,4 +1,4 @@
-#include "buzzer.h"
+#include "../hal/buzzer.h"
 
 #include "main.h"
 #include "tim.h"

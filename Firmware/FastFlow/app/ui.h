@@ -2,7 +2,7 @@
 #ifndef _UI_H_
 #define _UI_H_
 
-#include "display.h"
+#include "../hal/display.h"
 
 typedef enum{
 	UI_NO_EVENT,

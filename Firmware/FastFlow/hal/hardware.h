@@ -1,7 +1,7 @@
 #ifndef _HARDWARE_H_
 #define _HARDWARE_H_
 
-#include "display.h"
+#include "../hal/display.h"
 
 void hw_init();
 

@@ -1,0 +1,11 @@
+../hal/display.c:62:6:display_init	1
+../hal/display.c:99:6:display_updateRoutine	11
+../hal/display.c:163:6:display_request	2
+../hal/display.c:179:6:display_print	5
+../hal/display.c:215:6:_setCursorPosition	5
+../hal/display.c:250:6:_requestHandled	1
+../hal/display.c:256:6:_placeRequest	1
+../hal/display.c:269:6:_writeCommandToDisplay	1
+../hal/display.c:314:6:_writeCharToDisplay	1
+../hal/display.c:356:6:_writeToDisplay	7
+../hal/display.c:410:6:_updateDisplayArray	5

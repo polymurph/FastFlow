@@ -1,4 +1,4 @@
-../app/fastFlow.c:37:6:fastFlow_init	1
-../app/fastFlow.c:43:6:fastFlow_run	1
-../app/fastFlow.c:70:6:_state_menu	4
-../app/fastFlow.c:101:6:_action_init	1
+../app/fastFlow.c:36:6:fastFlow_init	1
+../app/fastFlow.c:42:6:fastFlow_run	1
+../app/fastFlow.c:69:6:_state_menu	4
+../app/fastFlow.c:102:6:_action_init	1

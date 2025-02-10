@@ -1,0 +1,11 @@
+../hal/hardware.c:37:6:hw_init	1
+../hal/hardware.c:101:12:hw_getDisplayobjectByPtr	1
+../hal/hardware.c:106:10:hw_getTick	1
+../hal/hardware.c:111:6:hw_toggleLED	1
+../hal/hardware.c:118:6:_i2cWrite	1
+../hal/hardware.c:123:6:_i2cRead	1
+../hal/hardware.c:130:6:_disp_enable	1
+../hal/hardware.c:135:6:_disp_delay	2
+../hal/hardware.c:142:6:_disp_writePort	1
+../hal/hardware.c:147:6:_disp_readWrite	1
+../hal/hardware.c:152:6:_disp_regSelect	1

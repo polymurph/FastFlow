@@ -1,3 +1,0 @@
-../hardware/buzzer.c:6:6:buzzer_init	1
-../hardware/buzzer.c:11:6:buzzer_turnOn	1
-../hardware/buzzer.c:16:6:buzzer_turnOff	1

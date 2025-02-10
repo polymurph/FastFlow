@@ -1,4 +1,4 @@
-#include "display.h"
+#include "../hal/display.h"
 
 #include <string.h>
 #include "gpio.h"

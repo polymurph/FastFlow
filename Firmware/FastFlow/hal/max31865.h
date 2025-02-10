@@ -33,12 +33,14 @@ typedef void (*fptr_b_t)(bool);
 typedef uint8_t (*u8_fptr_u8_t)(uint8_t);
 
 typedef enum{
+	max31865_err_NO_ERROR = 0x00,
     max31865_err_VOLTAGE_FAULT = 0x04,
     max31865_err_VRTDIN_TO_LOW = 0x08,
     max31865_err_VREFIN_TO_LOW = 0x10,
     max31865_err_VREFIN_TO_HIGH = 0x20,
     max31865_err_RTD_LOW_THRESHOLD = 0x40,
-    max31865_err_RTD_HIGH_THRESHOLD = 0x80
+    max31865_err_RTD_HIGH_THRESHOLD = 0x80,
+	max31865_err_NO_CONNECTION_TO_IC = 0xFF
 }max31865_err_t;
 
 typedef struct{

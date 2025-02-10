@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/ 
+*/
 
 #include "max31865.h"
 #include <stdint.h>
@@ -57,7 +57,7 @@ enum {
 static const float a1 = 2.55865721669;
 static const float a2 = 0.000967360412;
 static const float a3 = 0.000000731467;
-static const float a4 = 0.000000000691; 
+static const float a4 = 0.000000000691;
 static const float a5 = 7.31888555389e-13;
 
 static void _write_n_reg(const max31865_t*  device,

@@ -1,4 +1,5 @@
-#include "pcf8575.h"
+#include "../hal/pcf8575.h"
+
 #include <stddef.h>
 
 void _read(pcf8575_t *object, uint8_t *data, uint8_t len);

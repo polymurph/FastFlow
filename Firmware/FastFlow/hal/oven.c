@@ -1,4 +1,5 @@
-#include "oven.h"
+#include "../hal/oven.h"
+
 #include "gpio.h"
 #include "main.h"
 

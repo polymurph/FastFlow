@@ -1,4 +1,4 @@
-#include "hardware.h"
+#include "../hal/hardware.h"
 
 #include <stdbool.h>
 
@@ -6,11 +6,11 @@
 #include "usart.h"
 #include "tim.h"
 
-#include "pcf8575.h"
-
-#include "buzzer.h"
-#include "encoder.h"
 #include "ui.h"
+#include "../hal/buzzer.h"
+#include "../hal/encoder.h"
+#include "../hal/pcf8575.h"
+#include "tempSensor.h"
 
 static pcf8575_t ioexpander;
 
@@ -57,6 +57,8 @@ void hw_init()
 	encoder_init();
 
 	buzzer_init();
+
+	tempSensor_inti();
 
 
 	// third level

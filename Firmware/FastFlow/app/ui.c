@@ -1,16 +1,18 @@
 #include "ui.h"
 
+#include "string.h"
+
 #include <stdbool.h>
 
-#include "hardware.h"
-
 #include "tinyfsm.h"
-
-#include "encoder.h"
 
 #include "usart.h"
 
 #include "heater.h"
+#include "../hal/encoder.h"
+#include "../hal/hardware.h"
+
+#include "../hal/tempSensor.h"
 
 ui_event_t eventBuffer;
 
@@ -37,8 +39,13 @@ void _state_set_r_c();
 void _state_set_T_f();
 void _state_rampToSoak();
 
+void _state_hwTest();
+
+
 
 // action declaration
+void _action_clearDisiplay();
+void _action_printMenu();
 void _action_initSelectArrow();
 void _action_moveSelectArrowUp();
 void _action_moveSelectArrowDown();
@@ -58,14 +65,16 @@ void ui_init()
 	displayPtr = hw_getDisplayobjectByPtr();
 
 
-	display_print(displayPtr, menu, sizeof(menu), 0, 0);
-	display_request(displayPtr, SET_CURSOR_POSITION, 0, 0);
-
+	_action_clearDisplay();
+	//_action_printMenu();
 
 	while(display_updateRoutine(displayPtr));
 
 
-	fsmInitSingleThreaded(&ui_fsm, _state_listMenu, _action_initSelectArrow, fsmNoAction);
+
+
+	//fsmInitSingleThreaded(&ui_fsm, _state_listMenu, _action_initSelectArrow, fsmNoAction);
+	fsmInitSingleThreaded(&ui_fsm, _state_hwTest, fsmNoAction, fsmNoAction);
 }
 
 void ui_updateRoutine()
@@ -244,18 +253,69 @@ void _state_set_T_f()
 void _state_rampToSoak()
 {
 
-
+	static float temperature = 0;
 	static uint8_t temp;
 	//= heaterGetTemp();
 	// do a test here by just printing out the temperature from the MAX31865
-	temp++;
+
 	_displayPrintNumber(displayPtr, temp, 0, 4);
 
+	temperature = tempSensor_ReadADC();
+	//temp++;
+	temp = (uint8_t)temperature;
 
 
 }
 
+void _state_hwTest()
+{
+	static float adc = 0;
+	static uint8_t temp;
+	static char buffer[7];
+	float temperature;
+	//= heaterGetTemp();
+	// do a test here by just printing out the temperature from the MAX31865
+
+	_displayPrintNumber(displayPtr, temp, 0, 4);
+
+	if(1){
+		adc = tempSensor_ReadADC();
+
+		// buffer needs to be 6 chatracters long ecause of the '\0'
+		snprintf(buffer,6,"%u",adc);
+		// only print 5 characters to exclude '\0'
+		display_print(displayPtr, buffer, 5, 1, 2);
+	}
+	if(0){
+		temperature = tempSensor_ReadTemperatureCelsius();
+		//temperature = 20.00;
+
+		// buffer needs to be 7 chatracters long ecause of the '\0'
+		snprintf(buffer,7,"%4.1f",temperature);
+		// only print 6 characters to exclude '\0'
+		display_print(displayPtr, buffer, 6, 1, 2);
+	}
+
+	//_displayPrintNumber(displayPtr, (uint8_t)temperature, 1, 4);
+	temp++;
+
+}
+
 // action implementation
+
+void _action_clearDisplay()
+{
+	display_print(displayPtr, clear, sizeof(clear), 0, 0);
+	display_request(displayPtr, SET_CURSOR_POSITION, 0, 0);
+	display_request(displayPtr, SET_CURSOR_MODE, INVISIBLE, 0);
+}
+
+void _action_printMenu()
+{
+	display_print(displayPtr, menu, sizeof(menu), 0, 0);
+	display_request(displayPtr, SET_CURSOR_POSITION, 0, 0);
+}
+
 void _action_initSelectArrow()
 {
 	display_request(displayPtr, SET_CURSOR_MODE, INVISIBLE, 0);
@@ -387,5 +447,7 @@ void _encoderUpdateparameter(display_t *displayObject, uint8_t *param, uint8_t r
 			break;
 	}
 }
+
+
 
 

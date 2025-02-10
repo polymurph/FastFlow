@@ -1,0 +1,9 @@
+../hal/pcf8575.c:9:6:pcf8575_init	1
+../hal/pcf8575.c:28:6:pcf8575_writePort	2
+../hal/pcf8575.c:42:9:pcf8575_readPort	2
+../hal/pcf8575.c:56:6:pcf8575_writePin	3
+../hal/pcf8575.c:81:6:pcf8575_readPin	2
+../hal/pcf8575.c:99:6:pcf8575_togglePin	2
+../hal/pcf8575.c:118:6:_read	1
+../hal/pcf8575.c:123:6:_write	1
+../hal/pcf8575.c:128:6:_updatePorts	1

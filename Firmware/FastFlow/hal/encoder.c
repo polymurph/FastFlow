@@ -1,4 +1,4 @@
-#include "encoder.h"
+#include "../hal/encoder.h"
 
 #include "main.h"
 #include "tim.h"

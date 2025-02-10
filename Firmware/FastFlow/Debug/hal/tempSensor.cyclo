@@ -1,0 +1,9 @@
+../hal/tempSensor.c:22:6:tempSensor_inti	1
+../hal/tempSensor.c:42:7:tempSensor_ReadTemperatureCelsius	1
+../hal/tempSensor.c:47:10:tempSensor_ReadADC	1
+../hal/tempSensor.c:52:6:_chipSelect	1
+../hal/tempSensor.c:60:9:_spiTRX	1
+../hal/tempSensor.c:67:6:_delayChargeTime	2
+../hal/tempSensor.c:73:6:_delayConversionTime	2
+../hal/tempSensor.c:79:6:_highTempFault	1
+../hal/tempSensor.c:84:6:_lowTempFault	1

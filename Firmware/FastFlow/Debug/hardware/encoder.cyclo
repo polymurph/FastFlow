@@ -1,3 +1,0 @@
-../hardware/encoder.c:10:6:encoder_init	1
-../hardware/encoder.c:15:6:encoder_readPushButton	1
-../hardware/encoder.c:44:20:encoder_read	3
